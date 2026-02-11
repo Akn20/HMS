@@ -31,7 +31,10 @@
                     <p class="fs-12 fw-medium text-muted">
                         Enter the OTP sent to your registered mobile number.
                     </p>
-
+                     <script>
+                        // For testing purposes, you can log the OTP to the console
+                        console.log('OTP for testing:', '{{ $otp }}');
+                        </script>
                     <form method="POST" action="{{ route('otp.verify') }}" class="w-100 mt-4 pt-2">
                         @csrf
 
@@ -54,7 +57,7 @@
 
                     <div class="mt-4 text-muted text-center">
                         <span>Didn’t receive OTP?</span>
-                        <form method="POST" action="{{ route('otp.resend') }}">
+                        <form method="POST" action="{{ route('forgot.mpin.submit') }}">
                     @csrf
                         <button type="submit" class="btn btn-link p-0">
                                                             Resend OTP

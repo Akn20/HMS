@@ -53,10 +53,11 @@ class SignInController extends Controller
 
         $token = $user->createToken('auth')->plainTextToken;
 
-        return response()->json([
-            'token' => $token,
-            'user' => $user
-        ]);
+        // return response()->json([
+        //     'token' => $token,
+        //     'user' => $user
+        // ]);
+        return response()->view('dashboard.index', compact('user'));
     }
 
     public function sendOtp(Request $request)
@@ -113,10 +114,11 @@ class SignInController extends Controller
         // Increment global rate limiter
 
 
-        return response()->json([
-            'message' => 'OTP sent successfully',
-            'otp' => $otpCode // For testing purposes only, remove in production
-        ]);
+        // return response()->json([
+        //     'message' => 'OTP sent successfully',
+        //     'otp' => $otpCode // For testing purposes only, remove in production
+        // ]);
+        return response()->view('auth.otp', ['mobile' => $mobile, 'otp' => $otpCode]);   
     }
 
     public function verifyOtp(Request $request)
@@ -157,10 +159,11 @@ class SignInController extends Controller
         // Optional: Generate token or login user here
         // Auth::loginUsingId($userId);
 
-        return response()->json([
-            'message' => 'OTP verified successfully',
-            'data' => ['mobile' => $request->mobile]  // Or token
-        ]);
+        // return response()->json([
+        //     'message' => 'OTP verified successfully',
+        //     'data' => ['mobile' => $request->mobile]  // Or token
+        // ]);
+        return response()->view('auth.set-mpin', ['mobile' => $request->mobile]);
     }
 
     public function setMpin(Request $request)
@@ -180,16 +183,18 @@ class SignInController extends Controller
             'mpin' => Hash::make($request->mpin)
         ]);
 
-        return response()->json([
-            'message' => 'MPIN set successfully'
-        ]);
+        // return response()->json([
+        //     'message' => 'MPIN set successfully'
+        // ]);
+        return response()->view('auth.login');
     }
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
 
-        return response()->json([
-            'message' => 'Logged out successfully'
-        ]);
+        // return response()->json([
+        //     'message' => 'Logged out successfully'
+        // ]);
+        return response()->view('auth.login');
     }
 }
