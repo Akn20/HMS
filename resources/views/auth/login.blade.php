@@ -16,8 +16,11 @@
                     <h2 class="fs-20 fw-bolder mb-4">Login</h2>
                     <h4 class="fs-13 fw-bold mb-2">Login to your account</h4>
 
-                    <form method="POST" action="{{ route('login.submit') }}" class="w-100 mt-4 pt-2">
+                   
+                        <form action="{{ route('login.submit') }}" method="POST">
                         @csrf
+    
+
 
                         <!-- MOBILE NUMBER -->
                         <div class="mb-4">

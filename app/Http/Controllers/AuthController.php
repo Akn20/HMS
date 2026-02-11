@@ -35,4 +35,3 @@ class AuthController extends Controller
         ->with('success', 'MPIN set successfully');
     }
     }
-

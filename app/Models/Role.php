@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Otp extends Model
+class Role extends Model
 {
     use HasUuids, SoftDeletes;
 
@@ -13,15 +14,13 @@ class Otp extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'user_id',
-        'otp',
-        'expires_at',
-        'used'
+        'name',
+        'description',
+        'status'
     ];
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(User::class);
     }
 }
-

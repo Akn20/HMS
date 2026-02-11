@@ -9,17 +9,28 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-   public function up()
+   public function up(): void
 {
     Schema::create('otps', function (Blueprint $table) {
-        $table->id();
-        $table->string('mobile');
-        $table->string('otp');
+
+        $table->uuid('id')->primary();
+
+        $table->uuid('user_id');
+
+        $table->string('otp', 6);
         $table->timestamp('expires_at');
-        $table->boolean('used')->default(0);
+        $table->boolean('used')->default(false);
+
         $table->timestamps();
+        $table->softDeletes();
+
+        $table->foreign('user_id')
+              ->references('id')
+              ->on('users')
+              ->onDelete('cascade');
     });
 }
+
 
     /**
      * Reverse the migrations.

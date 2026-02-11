@@ -19,8 +19,11 @@
                         Enter your registered mobile number to receive OTP.
                     </p>
 
-                    <form method="POST" action="{{ route('forgot.mpin.submit') }}" class="w-100 mt-4 pt-2">
-                        @csrf
+                    
+                    <form method="POST" action="{{ route('forgot.mpin.submit') }}">
+                     @csrf
+                    
+
 
                         <!-- MOBILE NUMBER -->
                         <div class="mb-4">

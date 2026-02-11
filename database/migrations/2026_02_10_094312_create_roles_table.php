@@ -6,20 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('roles', function (Blueprint $table) {
-            $table->id();
+
+            $table->uuid('id')->primary(); // UUID primary key
+
+            $table->string('name'); // admin / user
+            $table->string('description')->nullable();
+            $table->boolean('status')->default(true);
+
             $table->timestamps();
+            $table->softDeletes(); // deleted_at
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('roles');
