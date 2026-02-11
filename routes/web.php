@@ -52,4 +52,13 @@ Route::get('/work-status/trash', [WorkStatusController::class, 'trash'])->name('
 Route::get('/work-status/restore/{id}', [WorkStatusController::class, 'restore'])->name('work-status.restore');
 Route::get('/work-status/force-delete/{id}', [WorkStatusController::class, 'forceDelete'])->name('work-status.forceDelete');
 
+use App\Http\Controllers\OrganizationController;
+Route::resource('organization', OrganizationController::class);
 
+use App\Http\Controllers\InstitutionController;
+
+Route::resource('institutions', InstitutionController::class);
+
+use App\Http\Controllers\ModuleController;
+
+Route::resource('modules', ModuleController::class);

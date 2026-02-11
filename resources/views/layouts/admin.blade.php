@@ -12,7 +12,9 @@
     @include('partials.navbar')
 
     <main class="nxl-container">
+       <div class="nxl-content px-4">
         @yield('content')
+    </div>
 
         <!-- [ Footer ] start -->
         @include('partials.footer')
