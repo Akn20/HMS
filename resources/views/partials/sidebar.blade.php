@@ -38,6 +38,15 @@
                     </a>
                 </li>
 
+                <!-- Designation -->
+
+                <li class="nxl-item">
+                    <a href="{{ route('designation.index') }}" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-send"></i></span>
+                        <span class="nxl-mtext">Designation</span>
+                    </a>
+                </li>
+
             </ul>
         </div>
     </div>

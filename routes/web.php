@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReligionController;
 use App\Http\Controllers\JobTypeController;
 use App\Http\Controllers\WorkStatusController;
+use App\Http\Controllers\DesignationController;
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
@@ -53,3 +55,15 @@ Route::get('/work-status/restore/{id}', [WorkStatusController::class, 'restore']
 Route::get('/work-status/force-delete/{id}', [WorkStatusController::class, 'forceDelete'])->name('work-status.forceDelete');
 
 
+// ------------------ DESIGNATION ------------------
+
+Route::get('/designation', [DesignationController::class, 'index'])->name('designation.index');
+Route::get('/designation/create', [DesignationController::class, 'create'])->name('designation.create');
+Route::post('/designation/store', [DesignationController::class, 'store'])->name('designation.store');
+Route::get('/designation/edit/{id}', [DesignationController::class, 'edit'])->name('designation.edit');
+Route::post('/designation/update/{id}', [DesignationController::class, 'update'])->name('designation.update');
+Route::get('/designation/delete/{id}', [DesignationController::class, 'destroy'])->name('designation.delete');
+
+Route::get('/designation/trash', [DesignationController::class, 'trash'])->name('designation.trash');
+Route::get('/designation/restore/{id}', [DesignationController::class, 'restore'])->name('designation.restore');
+Route::get('/designation/force-delete/{id}', [DesignationController::class, 'forceDelete'])->name('designation.forceDelete');
