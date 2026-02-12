@@ -26,6 +26,11 @@
 
                             <form action="{{ route('designation.update', $designation->id) }}" method="POST">
                                 @csrf
+<div class="mb-4">
+    <label class="form-label">Designation Code</label>
+    <input type="text" name="designation_code" class="form-control"
+        value="{{ $designation->designation_code }}">
+</div>
 
                                 <div class="mb-4">
                                     <label class="form-label">Designation Name</label>
@@ -34,11 +39,16 @@
                                 </div>
 
                                 <!-- Department placeholder -->
-                                <div class="mb-4">
-                                    <label class="form-label">Department (Optional)</label>
-                                    <input type="text" name="department_id" class="form-control"
-                                        value="{{ $designation->department_id }}">
-                                </div>
+                                <select name="department_id" class="form-select">
+                                    <option value="">Select Department</option>
+
+                                    @foreach($departments as $dept)
+                                        <option value="{{ $dept->id }}" {{ $designation->department_id == $dept->id ? 'selected' : '' }}>
+                                            {{ $dept->department_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
 
                                 <div class="mb-4">
                                     <label class="form-label">Description</label>

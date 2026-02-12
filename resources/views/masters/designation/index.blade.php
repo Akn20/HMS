@@ -41,6 +41,7 @@
                                             <th>Sl.No.</th>
                                             <th>Code</th>
                                             <th>Designation Name</th>
+                                            <th>Department</th>
                                             <th>Description</th>
                                             <th>Status</th>
                                             <th class="text-end">Actions</th>
@@ -61,11 +62,13 @@
                                                 <td>{{ $designation->designation_name }}</td>
 
                                                 <td>
-                                                    {{ $designation->description ?? '-' }}
+                                                    {{ $designation->department->department_name ?? '-' }}
                                                 </td>
 
+                                                <td>{{ $designation->description ?? '-' }}</td>
+
                                                 <td>
-                                                    @if($designation->status == 'Active')
+                                                    @if($designation->status)
                                                         <span class="badge bg-soft-success text-success">Active</span>
                                                     @else
                                                         <span class="badge bg-soft-danger text-danger">Inactive</span>
@@ -74,7 +77,6 @@
 
                                                 <td class="text-end">
                                                     <div class="hstack gap-2 justify-content-end">
-
                                                         <a href="{{ route('designation.edit', $designation->id) }}"
                                                             class="avatar-text avatar-md action-icon action-edit">
                                                             <i class="feather-edit"></i>
@@ -84,13 +86,13 @@
                                                             class="avatar-text avatar-md action-icon action-delete">
                                                             <i class="feather-trash-2"></i>
                                                         </a>
-
                                                     </div>
                                                 </td>
-
                                             </tr>
+
                                         @endforeach
                                     </tbody>
+
                                 </table>
 
                             </div>

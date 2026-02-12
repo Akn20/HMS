@@ -26,6 +26,13 @@
 
                             <form action="{{ route('designation.store') }}" method="POST">
                                 @csrf
+                                <div class="mb-4">
+                                    <label class="form-label">
+                                        Designation Code <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" name="designation_code" class="form-control"
+                                        placeholder="Enter designation code (DOC, NUR, LAB)">
+                                </div>
 
                                 <div class="mb-4">
                                     <label class="form-label">
@@ -37,10 +44,18 @@
 
                                 <!-- Department dropdown (optional for now) -->
                                 <div class="mb-4">
-                                    <label class="form-label">Department (Optional)</label>
-                                    <input type="text" name="department_id" class="form-control"
-                                        placeholder="Department will be integrated later">
+                                    <label class="form-label">Department</label>
+                                    <select name="department_id" class="form-select">
+                                        <option value="">Select Department</option>
+
+                                        @foreach($departments as $dept)
+                                            <option value="{{ $dept->id }}">
+                                                {{ $dept->department_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
+
 
                                 <div class="mb-4">
                                     <label class="form-label">Description</label>
