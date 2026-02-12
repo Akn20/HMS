@@ -1,30 +1,19 @@
 <nav class="nxl-navigation">
     <div class="navbar-wrapper">
-
-        {{-- ================= LOGO ================= --}}
         <div class="m-header">
-            <a href="{{ url('/') }}" class="b-brand">
-                <img src="{{ asset('assets/images/logo-full.png') }}" alt="" class="logo logo-lg" />
-                <img src="{{ asset('assets/images/logo-abbr.png') }}" alt="" class="logo logo-sm" />
+            <a href="#" class="b-brand">
+                <img src="assets/images/logo-full.png" alt="" class="logo logo-lg" />
+                <img src="assets/images/logo-abbr.png" alt="" class="logo logo-sm" />
             </a>
         </div>
 
-        {{-- ================= SIDEBAR MENU ================= --}}
         <div class="navbar-content">
             <ul class="nxl-navbar">
 
                 <li class="nxl-item nxl-caption">
                     <label>Navigation</label>
                 </li>
-
-                {{-- ================= DASHBOARD ================= --}}
-                <li class="nxl-item">
-                    <a href="{{ url('/') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-home"></i></span>
-                        <span class="nxl-mtext">Dashboard</span>
-                    </a>
-                </li>
-
+                
                 {{-- ================= ORGANIZATION ================= --}}
                 <li class="nxl-item nxl-hasmenu">
                     <a href="javascript:void(0);" class="nxl-link">
@@ -75,9 +64,31 @@
     </a>
 </li>
 
+                <!-- Religion -->
+                <li class="nxl-item">
+                    <a href="" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-airplay"></i></span>
+                        <span class="nxl-mtext">Religion</span>
+                    </a>
+                </li>
+
+                <!-- Job Type -->
+                <li class="nxl-item">
+                    <a href="" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-cast"></i></span>
+                        <span class="nxl-mtext">Job Type</span>
+                    </a>
+                </li>
+
+                <!-- Work Status -->
+                <li class="nxl-item">
+                    <a href="" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-send"></i></span>
+                        <span class="nxl-mtext">Work Status</span>
+                    </a>
+                </li>
 
             </ul>
         </div>
-
     </div>
 </nav>

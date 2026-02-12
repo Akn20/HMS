@@ -4,16 +4,16 @@
 
 <div class="page-header">
     <div class="page-header-left">
-        <h5 class="m-b-10">Organizations</h5>
+        <h5 class="m-b-10">Institutions</h5>
     </div>
     <div class="page-header-right ms-auto d-flex gap-2">
 
         {{-- Search --}}
-        <form method="GET" action="{{ route('organization.index') }}" class="d-flex">
+        <form method="GET" action="{{ route('institutions.index') }}" class="d-flex">
             <input type="text"
                    name="search"
                    class="form-control form-control-sm me-2"
-                   placeholder="Search Organization"
+                   placeholder="Search Institution"
                    value="{{ request('search') }}">
             <button class="btn btn-light-brand btn-sm">
                 <i class="feather-search"></i>
@@ -21,13 +21,13 @@
         </form>
 
         {{-- Add --}}
-        <a href="{{ route('organization.create') }}" class="btn btn-primary btn-sm">
-            <i class="feather-plus me-1"></i> Add Organization
+        <a href="{{ route('institutions.create') }}" class="btn btn-primary btn-sm">
+            <i class="feather-plus me-1"></i> Add Institution
         </a>
 
         {{-- Deleted --}}
-        <a href="{{ route('organization.deleted') }}" class="btn btn-danger btn-sm">
-            Deleted Organizations
+        <a href="{{ route('institutions.deleted') }}" class="btn btn-danger btn-sm">
+            Deleted Institutions
         </a>
 
     </div>
@@ -43,29 +43,23 @@
                     <thead>
                         <tr class="border-b">
                             <th>Sl.No</th>
-                            <th>Organization Name</th>
-                            <th>Type</th>
+                            <th>Institution Name</th>
+                            <th>Organization</th>
                             <th>Email</th>
-                            <th>Plan</th>
                             <th>Status</th>
                             <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        @forelse($organizations as $organization)
+                        @forelse($institutions as $institution)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $organization->name }}</td>
-                            <td>{{ $organization->type }}</td>
-                            <td>{{ $organization->email }}</td>
+                            <td>{{ $institution->name }}</td>
+                            <td>{{ $institution->organization_id ?? '-' }}</td>
+                            <td>{{ $institution->email }}</td>
                             <td>
-                                <span class="badge bg-soft-primary text-primary">
-                                    {{ $organization->plan_type }}
-                                </span>
-                            </td>
-                            <td>
-                                @if($organization->status == 1)
+                                @if($institution->status == 'Active')
                                     <span class="badge bg-soft-success text-success">Active</span>
                                 @else
                                     <span class="badge bg-soft-danger text-danger">Inactive</span>
@@ -76,7 +70,7 @@
                                 <div class="hstack gap-2 justify-content-end">
 
                                     {{-- View --}}
-                                    <a href="{{ route('organization.show', $organization->id) }}"
+                                    <a href="{{ route('institutions.show', $institution->id) }}"
                                        class="avatar-text avatar-md"
                                        data-bs-toggle="tooltip"
                                        title="View">
@@ -84,7 +78,7 @@
                                     </a>
 
                                     {{-- Edit --}}
-                                    <a href="{{ route('organization.edit', $organization->id) }}"
+                                    <a href="{{ route('institutions.edit', $institution->id) }}"
                                        class="avatar-text avatar-md"
                                        data-bs-toggle="tooltip"
                                        title="Edit">
@@ -92,9 +86,9 @@
                                     </a>
 
                                     {{-- Delete --}}
-                                    <form action="{{ route('organization.destroy', $organization->id) }}"
+                                    <form action="{{ route('institutions.destroy', $institution->id) }}"
                                           method="POST"
-                                          onsubmit="return confirm('Are you sure you want to delete this organization?')">
+                                          onsubmit="return confirm('Are you sure you want to delete this institution?')">
 
                                         @csrf
                                         @method('DELETE')
@@ -114,8 +108,8 @@
 
                         @empty
                         <tr>
-                            <td colspan="7" class="text-center">
-                                No Organizations Found
+                            <td colspan="6" class="text-center">
+                                No Institutions Found
                             </td>
                         </tr>
                         @endforelse
@@ -127,8 +121,9 @@
         </div>
 
         <div class="card-footer">
-            {{ $organizations->links() }}
+            {{ $institutions->links() }}
         </div>
+
     </div>
 </div>
 
