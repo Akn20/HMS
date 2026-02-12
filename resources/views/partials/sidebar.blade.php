@@ -38,6 +38,22 @@
                     </a>
                 </li>
 
+                <!-- Blood Group -->
+                <li class="nxl-item">
+                    <a href="{{ route('blood-groups.index') }}" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-droplet"></i></span>
+                        <span class="nxl-mtext">Blood Group</span>
+                    </a>
+                </li>
+
+                <!--Department-->
+                <li class="nxl-item">
+                    <a href="{{ route('departments.index') }}" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-grid"></i></span>
+                        <span class="nxl-mtext">Department</span>
+                    </a>
+                </li>
+
             </ul>
         </div>
     </div>

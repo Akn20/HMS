@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReligionController;
 use App\Http\Controllers\JobTypeController;
 use App\Http\Controllers\WorkStatusController;
+use App\Http\Controllers\BloodGroupController;
+use App\Http\Controllers\DepartmentController;
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
@@ -52,4 +55,16 @@ Route::get('/work-status/trash', [WorkStatusController::class, 'trash'])->name('
 Route::get('/work-status/restore/{id}', [WorkStatusController::class, 'restore'])->name('work-status.restore');
 Route::get('/work-status/force-delete/{id}', [WorkStatusController::class, 'forceDelete'])->name('work-status.forceDelete');
 
+// ---------Blood Group------------
+Route::prefix('masters')->group(function () {
+    Route::resource('blood-groups', BloodGroupController::class)->except(['show']);
+});
+Route::get('blood-groups/deleted/history', [BloodGroupController::class, 'deletedHistory'])->name('blood-groups.deleted');
+Route::put('blood-groups/{id}/restore', [BloodGroupController::class, 'restore'])->name('blood-groups.restore');
+Route::delete('blood-groups/{id}/force-delete', [BloodGroupController::class, 'forceDelete'])->name('blood-groups.forceDelete');
 
+// ------------------ DEPARTMENT ------------------
+Route::resource('departments', DepartmentController::class);
+Route::get('departments/deleted/history', [DepartmentController::class, 'deletedHistory'])->name('departments.deleted');
+Route::put('departments/{id}/restore', [DepartmentController::class, 'restore'])->name('departments.restore');
+Route::delete('departments/{id}/force-delete', [DepartmentController::class, 'forceDelete'])->name('departments.forceDelete');
