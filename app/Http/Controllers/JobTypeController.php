@@ -56,7 +56,7 @@ $request->validate([
     'job_type_name' => 'required|max:100',
     'status' => 'required'
 ]);
-
+$jobType = JobType::findOrFail($id);
 $jobType->update([
     'job_type_code' => $request->job_type_code,
     'job_type_name' => $request->job_type_name,
