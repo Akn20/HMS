@@ -11,12 +11,7 @@
         <a href="{{ route('departments.index') }}" class="btn btn-light">Back to List</a>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-    @if(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
+    
     <div class="main-content">
         <div class="card">
             <div class="card-body">
