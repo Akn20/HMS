@@ -26,62 +26,20 @@
 
                             <form action="{{ route('designation.store') }}" method="POST">
                                 @csrf
-                                <div class="mb-4">
-                                    <label class="form-label">
-                                        Designation Code <span class="text-danger">*</span>
-                                    </label>
-                                    <input type="text" name="designation_code" class="form-control"
-                                        placeholder="Enter designation code (DOC, NUR, LAB)">
-                                </div>
 
-                                <div class="mb-4">
-                                    <label class="form-label">
-                                        Designation Name <span class="text-danger">*</span>
-                                    </label>
-                                    <input type="text" name="designation_name" class="form-control"
-                                        placeholder="Enter designation name">
-                                </div>
+                                @include('masters.designation.form')
 
-                                <!-- Department dropdown (optional for now) -->
-                                <div class="mb-4">
-                                    <label class="form-label">Department</label>
-                                    <select name="department_id" class="form-select">
-                                        <option value="">Select Department</option>
-
-                                        @foreach($departments as $dept)
-                                            <option value="{{ $dept->id }}">
-                                                {{ $dept->department_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-
-                                <div class="mb-4">
-                                    <label class="form-label">Description</label>
-                                    <textarea name="description" class="form-control"
-                                        placeholder="Enter description"></textarea>
-                                </div>
-
-                                <div class="mb-4">
-                                    <label class="form-label">Status</label>
-                                    <select name="status" class="form-select">
-                                        <option value="Active">Active</option>
-                                        <option value="Inactive">Inactive</option>
-                                    </select>
-                                </div>
-
-                                <div class="d-flex gap-2">
-                                    <button type="submit" class="btn btn-primary">
-                                        Save
-                                    </button>
+                                <div class="d-flex gap-2 mt-3">
+                                    <button type="submit" class="btn btn-primary">Save</button>
 
                                     <a href="{{ route('designation.index') }}" class="btn btn-light">
                                         Cancel
                                     </a>
                                 </div>
-
                             </form>
+
+
+
 
                         </div>
                     </div>
