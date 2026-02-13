@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\SignInController;
-use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Auth\SignInController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'dashboard.index')->name('dashboard');
@@ -34,12 +34,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/users', [UserController::class, 'store']);
     Route::post('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    Route::get('/deleted-users', [UserController::class, 'displayDeletedUsers']);
+    Route::post('/restore-user/{id}', [UserController::class, 'restore']);
+    Route::delete('/force-delete-user/{id}', [UserController::class, 'forceDeleteUser']);
 
     // Roles (Admin only)    
     Route::get('/roles', [RoleController::class, 'index']);
     Route::post('/role', [RoleController::class, 'store']);
     Route::post('/roles/{id}', [RoleController::class, 'update']);
     Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
+    Route::get('/deleted-roles', [RoleController::class, 'displayDeletedRoles']);
+    Route::post('/restore-role/{id}', [RoleController::class, 'restore']);
+    Route::delete('/force-delete-role/{id}', [RoleController::class, 'forceDeleteRole']);
     
     // Logout
     Route::post('/logout', [SignInController::class, 'logout']);

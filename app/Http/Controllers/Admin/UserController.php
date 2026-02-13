@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Roles;
@@ -18,7 +18,7 @@ class UserController extends Controller
                 'message' => 'Only admin can view the details'
             ], 403);
         }
-        $users = User::with('role')->get();
+        $users = User::with('role')->where('deleted_at', null)->get();
         return response()->json($users);
     }
     public function store(Request $request)
@@ -85,6 +85,53 @@ class UserController extends Controller
         $user->delete();
 
         return response()->json(['message' => 'User deleted successfully']);
+    }
+    
+    public function displayDeletedUsers(){
+        $authUser = auth()->user();
+        if ($authUser->role->name !== 'admin') {
+            return response()->json([
+                'message' => 'Only admin can Delete Users'
+            ], 403);
+        }
+        $deletedUsers = User::withTrashed()->whereNotNull('deleted_at')->get();
+        if($deletedUsers->isEmpty()){
+            return response()->json(['message' => 'No deleted users found'], 404);
+        }   
+        return response()->json($deletedUsers);
+    }
+
+    public function restore($id)
+    {
+        $authUser = auth()->user();
+        if ($authUser->role->name !== 'admin') {
+            return response()->json([
+                'message' => 'Only admin can Restore Users'
+            ], 403);
+        }
+        $user = User::withTrashed()->findOrFail($id);
+        if(!$user){
+            return response()->json(['message' => 'User not found'], 404);
+        }
+        $user->restore();
+
+        return response()->json(['message' => 'User restored successfully']);
+    }
+
+    public function forceDeleteUser($id)
+    {
+        $authUser = auth()->user();
+        if ($authUser->role->name !== 'admin') {
+            return response()->json([
+                'message' => 'Only admin can Permanently Delete Users'
+            ], 403);
+        }
+        $user = User::withTrashed()->findOrFail($id);
+        if(!$user){
+            return response()->json(['message' => 'User not found'], 404);
+        }
+        $user->forceDelete();
+        return response()->json(['message' => 'User permanently deleted']);
     }
 }
 
