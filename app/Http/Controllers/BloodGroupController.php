@@ -27,9 +27,11 @@ class BloodGroupController extends Controller
 
     public function store(Request $request)
     {
+        $allowed= ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
         $request->validate([
             'blood_group_name' => [
                 'required',
+                Rule::in($allowed),
                 Rule::unique('blood_group_master', 'blood_group_name')->whereNull('deleted_at'),
             ],
 
@@ -55,10 +57,13 @@ class BloodGroupController extends Controller
     public function update(Request $request, string $id)
     {
         $bloodGroup = BloodGroup::findOrFail($id);
-
+        $allowed= ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
         $request->validate([
             'blood_group_name' => [
                 'required',
+                Rule::in($allowed),
+                Rule::unique('blood_group_master', 'blood_group_name')->ignore($bloodGroup->id,'id')
+                    ->whereNull('deleted_at'),
             ],
 
             'status' => ['required', Rule::in(['Active', 'Inactive'])],
