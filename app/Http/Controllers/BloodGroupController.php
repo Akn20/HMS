@@ -27,21 +27,43 @@ class BloodGroupController extends Controller
 
     public function store(Request $request)
     {
-        $allowed= ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
+        $allowed = ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
+        $blood = strtoupper(trim($request->blood_group_name));
+        $request->merge(['blood_group_name' => $blood]); 
+
         $request->validate([
             'blood_group_name' => [
                 'required',
                 Rule::in($allowed),
-                Rule::unique('blood_group_master', 'blood_group_name')->whereNull('deleted_at'),
             ],
-
             'status' => ['required', Rule::in(['Active', 'Inactive'])],
+        ], [
+            'blood_group_name.in' => 'Please select a valid blood group.',
         ]);
 
+        //If exists in Deleted Records 
+        $deleted = BloodGroup::onlyTrashed()
+            ->where('blood_group_name', $blood)
+            ->first();
+
+            if ($deleted) {
+            return back()->withInput()->withErrors([
+                    'blood_group_name' => 'This blood group was deleted earlier. Please restore it from Deleted Records.'
+                ]);
+        }
+
+        // If exists in Active records
+        $exists = BloodGroup::where('blood_group_name', $blood)->exists();
+        if ($exists) {
+            return back()->withInput()->withErrors([
+                    'blood_group_name' => 'This blood group already exists.'
+            ]);
+        }
+
         BloodGroup::create([
-            'blood_group_name' => strtoupper($request->blood_group_name),
-            'status' => $request->status,
-            'created_by' => auth()->id() ?? 1,
+            'blood_group_name' => $blood,
+            'status'           => $request->status,
+            'created_by'       => auth()->id() ?? 1,
         ]);
 
         return redirect()->route('blood-groups.index')->with('success', 'Blood group added.');
