@@ -4,8 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReligionController;
 use App\Http\Controllers\JobTypeController;
 use App\Http\Controllers\WorkStatusController;
+use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\BloodGroupController;
 use App\Http\Controllers\DepartmentController;
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -55,6 +57,7 @@ Route::get('/work-status/trash', [WorkStatusController::class, 'trash'])->name('
 Route::get('/work-status/restore/{id}', [WorkStatusController::class, 'restore'])->name('work-status.restore');
 Route::get('/work-status/force-delete/{id}', [WorkStatusController::class, 'forceDelete'])->name('work-status.forceDelete');
 
+
 // ---------Blood Group------------
 Route::prefix('masters')->group(function () {
     Route::resource('blood-groups', BloodGroupController::class)->except(['show']);
@@ -62,6 +65,20 @@ Route::prefix('masters')->group(function () {
 Route::get('blood-groups/deleted/history', [BloodGroupController::class, 'deletedHistory'])->name('blood-groups.deleted');
 Route::put('blood-groups/{id}/restore', [BloodGroupController::class, 'restore'])->name('blood-groups.restore');
 Route::delete('blood-groups/{id}/force-delete', [BloodGroupController::class, 'forceDelete'])->name('blood-groups.forceDelete');
+
+
+// ------------------ DESIGNATION ------------------
+
+Route::get('/designation', [DesignationController::class, 'index'])->name('designation.index');
+Route::get('/designation/create', [DesignationController::class, 'create'])->name('designation.create');
+Route::post('/designation/store', [DesignationController::class, 'store'])->name('designation.store');
+Route::get('/designation/edit/{id}', [DesignationController::class, 'edit'])->name('designation.edit');
+Route::post('/designation/update/{id}', [DesignationController::class, 'update'])->name('designation.update');
+Route::get('/designation/delete/{id}', [DesignationController::class, 'destroy'])->name('designation.delete');
+
+Route::get('/designation/trash', [DesignationController::class, 'trash'])->name('designation.trash');
+Route::get('/designation/restore/{id}', [DesignationController::class, 'restore'])->name('designation.restore');
+Route::get('/designation/force-delete/{id}', [DesignationController::class, 'forceDelete'])->name('designation.forceDelete');
 
 // ------------------ DEPARTMENT ------------------
 Route::resource('departments', DepartmentController::class);
