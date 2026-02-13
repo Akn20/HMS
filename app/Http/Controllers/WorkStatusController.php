@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\WorkStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\ApiResponse;
+use Illuminate\Support\Str;
 
 class WorkStatusController extends Controller
 {
@@ -23,18 +25,18 @@ class WorkStatusController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-    'work_status_code' => 'required|max:50|unique:work_status_master',
-    'work_status_name' => 'required|max:100',
-    'status' => 'required'
-]);
+            'work_status_code' => 'required|max:50|unique:work_status_master',
+            'work_status_name' => 'required|max:100',
+            'status' => 'required'
+        ]);
 
-WorkStatus::create([
-    'work_status_code' => $request->work_status_code,
-    'work_status_name' => $request->work_status_name,
-    'description'      => $request->description,
-    'status'           => $request->status,
-    'created_by'       => 1
-]);
+        WorkStatus::create([
+            'work_status_code' => $request->work_status_code,
+            'work_status_name' => $request->work_status_name,
+            'description' => $request->description,
+            'status' => $request->status,
+            'created_by' => 1
+        ]);
 
 
         return redirect()->route('work-status.index')
@@ -50,23 +52,26 @@ WorkStatus::create([
     public function update(Request $request, $id)
     {
         $request->validate([
-    'work_status_code' => "required|max:50|unique:work_status_master,work_status_code,$id",
-    'work_status_name' => 'required|max:100',
-    'status' => 'required'
-]);
+            'work_status_code' => "required|max:50|unique:work_status_master,work_status_code,$id",
+            'work_status_name' => 'required|max:100',
+            'status' => 'required'
+        ]);
 
-$workStatus->update([
-    'work_status_code' => $request->work_status_code,
-    'work_status_name' => $request->work_status_name,
-    'description'      => $request->description,
-    'status'           => $request->status,
-    'updated_by'       => 1
-]);
+        $workStatus = WorkStatus::findOrFail($id);
 
+        $workStatus->update([
+            'work_status_code' => $request->work_status_code,
+            'work_status_name' => $request->work_status_name,
+            'description' => $request->description,
+            'status' => $request->status,
+            'updated_by' => 1
+        ]);
 
         return redirect()->route('work-status.index')
             ->with('success', 'Work Status updated successfully');
     }
+
+
 
     public function destroy($id)
     {
@@ -96,4 +101,50 @@ $workStatus->update([
         return redirect()->route('work-status.trash')
             ->with('success', 'Work Status removed permanently');
     }
+
+    //API
+    public function apiIndex()
+    {
+        $data = WorkStatus::where('status', 'Active')->get();
+        return ApiResponse::success($data, 'Work status fetched');
+    }
+
+    public function apiStore(Request $request)
+    {
+        $request->validate([
+            'work_status_name' => 'required|max:100',
+            'status' => 'required'
+        ]);
+
+        $data = WorkStatus::create([
+            'id' => Str::uuid(),
+            'work_status_name' => $request->work_status_name,
+            'status' => $request->status,
+            'created_by' => 1
+        ]);
+
+        return ApiResponse::success($data, 'Work status created');
+    }
+
+    public function apiUpdate(Request $request, $id)
+    {
+        $data = WorkStatus::findOrFail($id);
+
+        $data->update([
+            'work_status_name' => $request->work_status_name,
+            'status' => $request->status,
+            'updated_by' => 1
+        ]);
+
+        return ApiResponse::success($data, 'Work status updated');
+    }
+
+    public function apiDelete($id)
+    {
+        $data = WorkStatus::findOrFail($id);
+        $data->delete();
+
+        return ApiResponse::success(null, 'Work status deleted');
+    }
+
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\JobType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\ApiResponse;
+use Illuminate\Support\Str;
 
 class JobTypeController extends Controller
 {
@@ -22,19 +24,19 @@ class JobTypeController extends Controller
 
     public function store(Request $request)
     {
-$request->validate([
-    'job_type_code' => 'required|max:50|unique:job_type_master',
-    'job_type_name' => 'required|max:100',
-    'status' => 'required'
-]);
+        $request->validate([
+            'job_type_code' => 'required|max:50|unique:job_type_master',
+            'job_type_name' => 'required|max:100',
+            'status' => 'required'
+        ]);
 
-JobType::create([
-    'job_type_code' => $request->job_type_code,
-    'job_type_name' => $request->job_type_name,
-    'description'   => $request->description,
-    'status'        => $request->status,
-    'created_by'    => 1
-]);
+        JobType::create([
+            'job_type_code' => $request->job_type_code,
+            'job_type_name' => $request->job_type_name,
+            'description' => $request->description,
+            'status' => $request->status,
+            'created_by' => 1
+        ]);
 
 
         return redirect()->route('job-type.index')
@@ -49,24 +51,27 @@ JobType::create([
 
     public function update(Request $request, $id)
     {
-$request->validate([
-    'job_type_code' => "required|max:50|unique:job_type_master,job_type_code,$id",
-    'job_type_name' => 'required|max:100',
-    'status' => 'required'
-]);
+        $jobType = JobType::findOrFail($id);
 
-$jobType->update([
-    'job_type_code' => $request->job_type_code,
-    'job_type_name' => $request->job_type_name,
-    'description'   => $request->description,
-    'status'        => $request->status,
-    'updated_by'    => 1
-]);
+        $request->validate([
+            'job_type_code' => "required|max:50|unique:job_type_master,job_type_code,$id",
+            'job_type_name' => 'required|max:100',
+            'status' => 'required'
+        ]);
 
+        $jobType->update([
+            'job_type_code' => $request->job_type_code,
+            'job_type_name' => $request->job_type_name,
+            'description' => $request->description,
+            'status' => $request->status,
+            'updated_by' => 1
+        ]);
 
         return redirect()->route('job-type.index')
             ->with('success', 'Job Type updated successfully');
     }
+
+
 
     public function destroy($id)
     {
@@ -96,4 +101,51 @@ $jobType->update([
         return redirect()->route('job-type.trash')
             ->with('success', 'Job Type removed permanently');
     }
+
+    //API
+
+    public function apiIndex()
+    {
+        $data = JobType::where('status', 'Active')->get();
+        return ApiResponse::success($data, 'Job types fetched');
+    }
+
+    public function apiStore(Request $request)
+    {
+        $request->validate([
+            'job_type_name' => 'required|max:100',
+            'status' => 'required'
+        ]);
+
+        $data = JobType::create([
+            'id' => Str::uuid(),
+            'job_type_name' => $request->job_type_name,
+            'status' => $request->status,
+            'created_by' => 1
+        ]);
+
+        return ApiResponse::success($data, 'Job type created');
+    }
+
+    public function apiUpdate(Request $request, $id)
+    {
+        $data = JobType::findOrFail($id);
+
+        $data->update([
+            'job_type_name' => $request->job_type_name,
+            'status' => $request->status,
+            'updated_by' => 1
+        ]);
+
+        return ApiResponse::success($data, 'Job type updated');
+    }
+
+    public function apiDelete($id)
+    {
+        $data = JobType::findOrFail($id);
+        $data->delete();
+
+        return ApiResponse::success(null, 'Job type deleted');
+    }
+
 }
