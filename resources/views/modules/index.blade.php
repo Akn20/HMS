@@ -263,9 +263,9 @@
                                                     <!--Status-->
                                                     <td>
                                                         @if($module->status)
-                                                            <span class="text-success fw-semibold">Active</span>
+                                                            <span class="badge bg-soft-success text-success">Active</span>
                                                         @else
-                                                            <span class="text-danger fw-semibold">Inactive</span>
+                                                            <span class="badge bg-soft-danger text-danger">Inactive</span>
                                                         @endif
                                                     </td>
 

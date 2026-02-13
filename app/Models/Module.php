@@ -35,4 +35,10 @@ protected static function boot()
     });
 }
 
+public function institutions()
+{
+    return $this->belongsToMany(Institution::class);
+}
+
+
 }

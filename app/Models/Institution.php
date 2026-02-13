@@ -63,4 +63,16 @@ class Institution extends Model
             }
         });
     }
+
+    public function organization()
+{
+    return $this->belongsTo(Organization::class);
+}
+
+public function modules()
+{
+    return $this->belongsToMany(Module::class);
+}
+
+
 }

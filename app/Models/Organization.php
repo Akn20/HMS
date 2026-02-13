@@ -78,5 +78,11 @@ protected static function boot()
         }
     });
 }
+
+public function institutions()
+{
+    return $this->hasMany(Institution::class);
+}
+
 }
 

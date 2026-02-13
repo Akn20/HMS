@@ -35,8 +35,11 @@
             </div>
 
             <div class="col-md-6">
-                <label class="form-label">Organization ID</label>
-                <p class="form-control-plaintext">{{ $institution->organization_id ?? '-' }}</p>
+                <label class="form-label">Organization Name</label>
+                <p class="form-control-plaintext">
+    {{ $institution->organization->name ?? '-' }}
+</p>
+
             </div>
 
             <div class="col-md-6">
@@ -85,10 +88,14 @@
             </div>
 
             <div class="col-md-6">
-                <label>Status</label>
-                <span class="badge bg-{{ $institution->status == 'Active' ? 'success' : 'danger' }}">
-                    {{ $institution->status }}
-                </span>
+                <label class="text-muted small">Status</label>
+                <div>
+                    @if($institution->status)
+                        <span class="text-success fw-semibold">Active</span>
+                    @else
+                        <span class="text-danger fw-semibold">Inactive</span>
+                    @endif
+                </div>
             </div>
 
         </div>
@@ -143,6 +150,17 @@
                 <label>Admin Name</label>
                 <p class="form-control-plaintext">{{ $institution->admin_name ?? '-' }}</p>
             </div>
+            
+            <div class="col-md-6">
+    <label class="form-label">Modules</label>
+    <p class="form-control-plaintext">
+        @if($institution->modules && $institution->modules->count())
+            {{ $institution->modules->pluck('module_display_name')->implode(', ') }}
+        @else
+            -
+        @endif
+    </p>
+</div>
 
             <div class="col-md-4">
                 <label>Admin Email</label>

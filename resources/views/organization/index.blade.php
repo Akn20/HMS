@@ -100,7 +100,7 @@
                                         @method('DELETE')
 
                                         <button type="submit"
-                                                class="avatar-text avatar-md border-0 bg-transparent"
+                                                class="avatar-text avatar-md d-flex align-items-center justify-content-center"
                                                 data-bs-toggle="tooltip"
                                                 title="Delete">
                                             <i class="feather feather-trash-2"></i>

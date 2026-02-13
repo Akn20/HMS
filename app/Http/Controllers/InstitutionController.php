@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Institution;
+use App\Models\Organization;
+use App\Models\Module;
 use Illuminate\Http\Request;
 
 class InstitutionController extends Controller
@@ -12,13 +14,14 @@ class InstitutionController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Institution::query();
+        $query = Institution::with(['organization', 'modules']);
 
-        // Search functionality
         if ($request->search) {
-            $query->where('name', 'like', '%' . $request->search . '%')
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
                   ->orWhere('code', 'like', '%' . $request->search . '%')
                   ->orWhere('email', 'like', '%' . $request->search . '%');
+            });
         }
 
         $institutions = $query->latest()->paginate(10);
@@ -29,42 +32,25 @@ class InstitutionController extends Controller
     /**
      * Show Add Institution Form
      */
-public function create()
-{
-    $lastInstitution = Institution::withTrashed()->latest()->first();
+    public function create()
+    {
+        $organizations = Organization::where('status', 1)->get();
+        $modules = Module::orderBy('priority')->get();
 
-    if ($lastInstitution) {
-        $lastNumber = (int) substr($lastInstitution->code, 4);
-        $nextNumber = $lastNumber + 1;
-    } else {
-        $nextNumber = 1;
+        $lastInstitution = Institution::withTrashed()->latest()->first();
+
+        $nextNumber = $lastInstitution
+            ? ((int) substr($lastInstitution->code, 4)) + 1
+            : 1;
+
+        $nextCode = 'INST' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
+        return view('institutions.create', compact(
+            'nextCode',
+            'organizations',
+            'modules'
+        ));
     }
-
-    $nextCode = 'INST' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
-
-    /*
-    ==========================================================
-    FUTURE: FETCH ORGANIZATIONS (UNCOMMENT WHEN READY)
-    ==========================================================
-
-    use App\Models\Organization;
-
-    $organizations = Organization::where('status', 'Active')->get();
-    */
-
-    /*
-    ==========================================================
-    FUTURE: FETCH MODULES (UNCOMMENT WHEN READY)
-    ==========================================================
-
-    use App\Models\Module;
-
-    $modules = Module::where('status', 'Active')->get();
-    */
-
-    return view('institutions.create', compact('nextCode'));
-}
-
 
     /**
      * Store Institution
@@ -72,14 +58,35 @@ public function create()
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'organization_id' => 'required|exists:organizations,id',
+            'name' => 'required|string|max:255',
             'code' => 'required|unique:institutions,code',
-            'email' => 'nullable|email',
+            'modules' => 'nullable|array',
+            'modules.*' => 'exists:modules,id',
         ]);
 
-        $data = $request->all();
+        $data = $request->only([
+            'organization_id',
+            'name',
+            'code',
+            'gst_number',
+            'email',
+            'contact_number',
+            'address',
+            'city',
+            'state',
+            'country',
+            'pincode',
+            'institution_url',
+            'login_template',
+            'default_language',
+            'admin_name',
+            'admin_email',
+            'admin_mobile',
+            'status',
+        ]);
 
-        // Logo Upload
+        // File Uploads
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $filename = time() . '_logo.' . $file->getClientOriginalExtension();
@@ -87,7 +94,6 @@ public function create()
             $data['logo'] = $filename;
         }
 
-        // MOU Upload
         if ($request->hasFile('mou_copy')) {
             $file = $request->file('mou_copy');
             $filename = time() . '_mou.' . $file->getClientOriginalExtension();
@@ -95,15 +101,15 @@ public function create()
             $data['mou_copy'] = $filename;
         }
 
-        // Modules (convert array to JSON)
+        $institution = Institution::create($data);
+
+        // ✅ Sync modules (Pivot table)
         if ($request->modules) {
-            $data['modules'] = json_encode($request->modules);
+            $institution->modules()->sync($request->modules);
         }
 
-        Institution::create($data);
-
         return redirect()->route('institutions.index')
-                         ->with('success', 'Institution Created Successfully');
+            ->with('success', 'Institution Created Successfully');
     }
 
     /**
@@ -111,9 +117,15 @@ public function create()
      */
     public function edit($id)
     {
-        $institution = Institution::findOrFail($id);
+        $institution = Institution::with('modules')->findOrFail($id);
+        $organizations = Organization::where('status', 1)->get();
+        $modules = Module::orderBy('priority')->get();
 
-        return view('institutions.edit', compact('institution'));
+        return view('institutions.edit', compact(
+            'institution',
+            'organizations',
+            'modules'
+        ));
     }
 
     /**
@@ -124,13 +136,34 @@ public function create()
         $institution = Institution::findOrFail($id);
 
         $request->validate([
-            'name' => 'required',
+            'organization_id' => 'required|exists:organizations,id',
+            'name' => 'required|string|max:255',
             'code' => 'required|unique:institutions,code,' . $id,
+            'modules' => 'nullable|array',
+            'modules.*' => 'exists:modules,id',
         ]);
 
-        $data = $request->all();
+        $data = $request->only([
+            'organization_id',
+            'name',
+            'code',
+            'gst_number',
+            'email',
+            'contact_number',
+            'address',
+            'city',
+            'state',
+            'country',
+            'pincode',
+            'institution_url',
+            'login_template',
+            'default_language',
+            'admin_name',
+            'admin_email',
+            'admin_mobile',
+            'status',
+        ]);
 
-        // Logo Update
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $filename = time() . '_logo.' . $file->getClientOriginalExtension();
@@ -138,7 +171,6 @@ public function create()
             $data['logo'] = $filename;
         }
 
-        // MOU Update
         if ($request->hasFile('mou_copy')) {
             $file = $request->file('mou_copy');
             $filename = time() . '_mou.' . $file->getClientOriginalExtension();
@@ -146,94 +178,51 @@ public function create()
             $data['mou_copy'] = $filename;
         }
 
-        if ($request->modules) {
-            $data['modules'] = json_encode($request->modules);
-        }
-
         $institution->update($data);
 
+        // ✅ Sync modules (update pivot)
+        $institution->modules()->sync($request->modules ?? []);
+
         return redirect()->route('institutions.index')
-                         ->with('success', 'Institution Updated Successfully');
+            ->with('success', 'Institution Updated Successfully');
     }
 
     /**
-     * Soft Delete Institution
+     * Delete
      */
     public function destroy($id)
     {
-        $institution = Institution::findOrFail($id);
-        $institution->delete();
+        Institution::findOrFail($id)->delete();
 
         return redirect()->route('institutions.index')
-                         ->with('success', 'Institution Deleted Successfully');
+            ->with('success', 'Institution Deleted Successfully');
     }
-
-    /**
-     * Deleted Institutions List
-     */
-    public function deleted()
-    {
-        $institutions = Institution::onlyTrashed()->paginate(10);
-
-        return view('institutions.deleted', compact('institutions'));
-    }
-
-    /**
-     * Restore Deleted Institution
-     */
-    public function restore($id)
-    {
-        $institution = Institution::withTrashed()->findOrFail($id);
-        $institution->restore();
-
-        return redirect()->route('institutions.index')
-                         ->with('success', 'Institution Restored Successfully');
-    }
-
-    /**
-     * Permanently Delete
-     */
-    public function forceDelete($id)
-    {
-        $institution = Institution::withTrashed()->findOrFail($id);
-        $institution->forceDelete();
-
-        return redirect()->route('institutions.deleted')
-                         ->with('success', 'Institution Permanently Deleted');
-    }
-
-    /**
-     * Activate / Deactivate
-     */
-    public function toggleStatus($id)
-{
-    $institution = Institution::findOrFail($id);
-    $institution->status = !$institution->status;
-    $institution->save();
-
-    return back();
-}
-
 
     public function show($id)
-{
-    $institution = Institution::findOrFail($id);
+    {
+        $institution = Institution::with(['organization', 'modules'])->findOrFail($id);
 
-    return view('institutions.show', compact('institution'));
-}
+        return view('institutions.show', compact('institution'));
+    }
 
-public function apiIndex()
+
+
+    /**
+     * ================= API SECTION =================
+     */
+
+    public function apiIndex()
     {
         return response()->json([
             'status' => true,
             'message' => 'Institution list fetched successfully',
-            'data' => Institution::latest()->get()
+            'data' => Institution::with('organization')->latest()->get()
         ]);
     }
 
     public function apiShow($id)
     {
-        $institution = Institution::find($id);
+        $institution = Institution::with('organization')->find($id);
 
         if (!$institution) {
             return response()->json([
@@ -247,14 +236,36 @@ public function apiIndex()
             'data' => $institution
         ]);
     }
+
     public function apiStore(Request $request)
     {
         $request->validate([
+            'organization_id' => 'required|exists:organizations,id',
             'name' => 'required',
             'code' => 'required|unique:institutions,code',
         ]);
 
-        $institution = Institution::create($request->all());
+        $institution = Institution::create($request->only([
+    'organization_id',
+    'name',
+    'code',
+    'gst_number',
+    'email',
+    'contact_number',
+    'address',
+    'city',
+    'state',
+    'country',
+    'pincode',
+    'institution_url',
+    'login_template',
+    'default_language',
+    'admin_name',
+    'admin_email',
+    'admin_mobile',
+    'status',
+]));
+
 
         return response()->json([
             'status' => true,
@@ -262,6 +273,7 @@ public function apiIndex()
             'data' => $institution
         ], 201);
     }
+
     public function apiUpdate(Request $request, $id)
     {
         $institution = Institution::find($id);
@@ -273,7 +285,27 @@ public function apiIndex()
             ], 404);
         }
 
-        $institution->update($request->all());
+        $institution->update($request->only([
+    'organization_id',
+    'name',
+    'code',
+    'gst_number',
+    'email',
+    'contact_number',
+    'address',
+    'city',
+    'state',
+    'country',
+    'pincode',
+    'institution_url',
+    'login_template',
+    'default_language',
+    'admin_name',
+    'admin_email',
+    'admin_mobile',
+    'status',
+]));
+
 
         return response()->json([
             'status' => true,
@@ -281,6 +313,7 @@ public function apiIndex()
             'data' => $institution
         ]);
     }
+
     public function apiDelete($id)
     {
         $institution = Institution::find($id);
@@ -299,5 +332,4 @@ public function apiIndex()
             'message' => 'Institution deleted successfully'
         ]);
     }
-
 }
