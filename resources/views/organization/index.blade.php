@@ -48,7 +48,7 @@
                             <th>Email</th>
                             <th>Plan</th>
                             <th>Status</th>
-                            <th class="text-end">Actions</th>
+                            <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -106,6 +106,18 @@
                                             <i class="feather feather-trash-2"></i>
                                         </button>
                                     </form>
+
+                                    <!--Status Toggle-->
+                                                       <form action="{{ route('organization.toggleStatus', $organization->id) }}"
+                                                            method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <button type="submit" class="status-toggle 
+                                                                {{ $organization->status ? 'active' : 'inactive' }}">
+                                                                <span>{{ $organization->status ? 'Activate' : 'Deactivate' }}</span>
+                                                            </button>
+                                                        </form>
 
                                 </div>
                             </td>

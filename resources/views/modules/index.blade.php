@@ -217,6 +217,7 @@
                                                 <th>Access For</th>
                                                 <th>Page Name</th>
                                                 <th>Type</th>
+                                                <th>status</th>
                                                 <th class="text-center">Actions</th>
                                             </tr>
                                         </thead>
@@ -259,6 +260,15 @@
                                                     <!-- Type -->
                                                     <td>{{ ucfirst($module->type) }}</td>
 
+                                                    <!--Status-->
+                                                    <td>
+                                                        @if($module->status)
+                                                            <span class="text-success fw-semibold">Active</span>
+                                                        @else
+                                                            <span class="text-danger fw-semibold">Inactive</span>
+                                                        @endif
+                                                    </td>
+
                                                     <!-- Actions -->
                                                     <td class="text-end">
                                                     <div class="hstack gap-2 justify-content-end">
@@ -292,6 +302,18 @@
                                                                     data-bs-toggle="tooltip"
                                                                     title="Delete">
                                                                 <i class="feather feather-trash-2"></i>
+                                                            </button>
+                                                        </form>
+
+                                                        <!--Status Toggle-->
+                                                       <form action="{{ route('modules.toggleStatus', $module->id) }}"
+                                                            method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <button type="submit" class="status-toggle 
+                                                                {{ $module->status ? 'active' : 'inactive' }}">
+                                                                <span>{{ $module->status ? 'Activate' : 'Deactivate' }}</span>
                                                             </button>
                                                         </form>
 

@@ -206,17 +206,15 @@ public function create()
      * Activate / Deactivate
      */
     public function toggleStatus($id)
-    {
-        $institution = Institution::findOrFail($id);
+{
+    $institution = Institution::findOrFail($id);
+    $institution->status = !$institution->status;
+    $institution->save();
 
-        $institution->status = $institution->status == 'Active'
-                                ? 'Inactive'
-                                : 'Active';
+    return back();
+}
 
-        $institution->save();
 
-        return back()->with('success', 'Status Updated');
-    }
     public function show($id)
 {
     $institution = Institution::findOrFail($id);
@@ -224,6 +222,82 @@ public function create()
     return view('institutions.show', compact('institution'));
 }
 
+public function apiIndex()
+    {
+        return response()->json([
+            'status' => true,
+            'message' => 'Institution list fetched successfully',
+            'data' => Institution::latest()->get()
+        ]);
+    }
 
+    public function apiShow($id)
+    {
+        $institution = Institution::find($id);
+
+        if (!$institution) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Institution not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $institution
+        ]);
+    }
+    public function apiStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'code' => 'required|unique:institutions,code',
+        ]);
+
+        $institution = Institution::create($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Institution created successfully',
+            'data' => $institution
+        ], 201);
+    }
+    public function apiUpdate(Request $request, $id)
+    {
+        $institution = Institution::find($id);
+
+        if (!$institution) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Institution not found'
+            ], 404);
+        }
+
+        $institution->update($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Institution updated successfully',
+            'data' => $institution
+        ]);
+    }
+    public function apiDelete($id)
+    {
+        $institution = Institution::find($id);
+
+        if (!$institution) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Institution not found'
+            ], 404);
+        }
+
+        $institution->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Institution deleted successfully'
+        ]);
+    }
 
 }

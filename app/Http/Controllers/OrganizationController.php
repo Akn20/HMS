@@ -132,4 +132,74 @@ class OrganizationController extends Controller
 
         return view('organization.show', compact('organization'));
     }
+
+    public function toggleStatus($id)
+{
+    $Organization = Organization::findOrFail($id);
+    $Organization->status = !$Organization->status;
+    $Organization->save();
+
+    return back();
+}
+
+    public function apiIndex()
+    {
+        return response()->json([
+            'status' => true,
+            'data' => \App\Models\Organization::latest()->get()
+        ]);
+    }
+
+    public function apiStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+        $org = \App\Models\Organization::create($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Organization created',
+            'data' => $org
+        ]);
+    }
+
+    public function apiUpdate(Request $request, $id)
+    {
+        $org = \App\Models\Organization::findOrFail($id);
+        $org->update($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Organization updated'
+        ]);
+    }
+
+    public function apiDelete($id)
+    {
+        $org = \App\Models\Organization::findOrFail($id);
+        $org->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Organization deleted'
+        ]);
+    }
+    public function apiShow($id)
+    {
+        $organization = Organization::find($id);
+
+        if (!$organization) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Organization not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $organization
+        ]);
+    }
 }

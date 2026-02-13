@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
        Schema::create('modules', function (Blueprint $table) {
-        $table->id();
+        $table->uuid('id')->primary();
         $table->string('module_label')->unique();
         $table->string('module_display_name');
         $table->string('parent_module')->nullable();
@@ -22,6 +22,7 @@ return new class extends Migration
         $table->string('page_name');
         $table->string('type');
         $table->string('access_for');
+        $table->boolean('status')->default(1);
         $table->timestamps();
     });
     }

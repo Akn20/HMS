@@ -32,6 +32,11 @@ Route::delete('/organization/force-delete/{id}', [OrganizationController::class,
 // Resource route (ONLY ONCE)
 Route::resource('organization', OrganizationController::class);
 
+Route::patch('organization/{id}/toggle-status',
+    [OrganizationController::class, 'toggleStatus']
+)->name('organization.toggleStatus');
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -51,12 +56,15 @@ Route::get('/institutions/restore/{id}', [InstitutionController::class, 'restore
 Route::delete('/institutions/force-delete/{id}', [InstitutionController::class, 'forceDelete'])
     ->name('institutions.forceDelete');
 
-// Toggle status
-Route::get('/institutions/toggle-status/{id}', [InstitutionController::class, 'toggleStatus'])
-    ->name('institutions.toggleStatus');
+
 
 // Resource route
 Route::resource('institutions', InstitutionController::class);
+
+Route::patch('institutions/{id}/toggle-status',
+    [InstitutionController::class, 'toggleStatus']
+)->name('institutions.toggleStatus');
+
 
 
 /*
@@ -73,3 +81,7 @@ Route::get('modules/restore/{id}', [ModuleController::class, 'restore'])
 Route::delete('modules/force-delete/{id}', [ModuleController::class, 'forceDelete'])
     ->name('modules.forceDelete');
 Route::resource('modules', ModuleController::class);
+
+Route::patch('modules/{id}/toggle-status',
+    [ModuleController::class, 'toggleStatus'])
+    ->name('modules.toggleStatus');

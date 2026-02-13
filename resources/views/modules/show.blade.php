@@ -2,79 +2,96 @@
 
 @section('content')
 
-<div class="page-header">
-    <div class="row align-items-center">
-        <div class="col">
-            <h5 class="m-b-10">Module Details</h5>
-        </div>
-        <div class="col text-end">
-            <a href="{{ route('modules.index') }}" class="btn btn-sm btn-outline-primary">
-                <i class="feather feather-arrow-left"></i> Back
-            </a>
-        </div>
-    </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Module Details</h4>
+
+    <a href="{{ route('modules.index') }}" 
+       class="btn btn-sm btn-outline-primary">
+        <i class="feather feather-arrow-left"></i> Back
+    </a>
 </div>
 
-<div class="card">
+<div class="card shadow-sm">
     <div class="card-body">
 
-        <table class="table table-bordered">
-            <tr>
-                <th>Module Label</th>
-                <td>{{ $module->module_label }}</td>
-            </tr>
+        <div class="row g-4">
 
-            <tr>
-                <th>Module Display Name</th>
-                <td>{{ $module->module_display_name }}</td>
-            </tr>
+            <div class="col-md-6">
+                <label class="text-muted small">Module Label</label>
+                <div class="fw-semibold fs-6">
+                    {{ $module->module_label }}
+                </div>
+            </div>
 
-            <tr>
-                <th>Parent Module</th>
-                <td>{{ $module->parent_module ?? '-' }}</td>
-            </tr>
+            <div class="col-md-6">
+                <label class="text-muted small">Display Name</label>
+                <div class="fw-semibold fs-6">
+                    {{ $module->module_display_name }}
+                </div>
+            </div>
 
-            <tr>
-                <th>Priority</th>
-                <td>{{ $module->priority }}</td>
-            </tr>
+            <div class="col-md-6">
+                <label class="text-muted small">Parent Module</label>
+                <div class="fw-semibold">
+                    {{ $module->parent_module ?? '-' }}
+                </div>
+            </div>
 
-            <tr>
-                <th>Icon</th>
-                <td>{{ $module->icon }}</td>
-            </tr>
+            <div class="col-md-6">
+                <label class="text-muted small">Priority</label>
+                <div class="fw-semibold">
+                    {{ $module->priority }}
+                </div>
+            </div>
 
-            <tr>
-                <th>File URL</th>
-                <td>{{ $module->file_url }}</td>
-            </tr>
+            <div class="col-md-6">
+                <label class="text-muted small">Icon</label>
+                <div class="fw-semibold">
+                    <i class="feather {{ $module->icon }}"></i>
+                    {{ $module->icon }}
+                </div>
+            </div>
 
-            <tr>
-                <th>Page Name</th>
-                <td>{{ $module->page_name }}</td>
-            </tr>
+            <div class="col-md-6">
+                <label class="text-muted small">File URL</label>
+                <div class="fw-semibold text-primary">
+                    {{ $module->file_url }}
+                </div>
+            </div>
 
-            <tr>
-                <th>Type</th>
-                <td>{{ ucfirst($module->type) }}</td>
-            </tr>
+            <div class="col-md-6">
+                <label class="text-muted small">Page Name</label>
+                <div class="fw-semibold">
+                    {{ $module->page_name }}
+                </div>
+            </div>
 
-            <tr>
-                <th>Access For</th>
-                <td>{{ ucfirst($module->access_for) }}</td>
-            </tr>
+            <div class="col-md-6">
+                <label class="text-muted small">Type</label>
+                <div class="fw-semibold">
+                    {{ ucfirst($module->type) }}
+                </div>
+            </div>
 
-            <tr>
-                <th>Status</th>
-                <td>
-                    @if($module->deleted_at)
-                        <span class="badge bg-danger">Deleted</span>
+            <div class="col-md-6">
+                <label class="text-muted small">Access For</label>
+                <div class="fw-semibold">
+                    {{ ucfirst($module->access_for) }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="text-muted small">Status</label>
+                <div>
+                    @if($module->status)
+                        <span class="text-success fw-semibold">Active</span>
                     @else
-                        <span class="badge bg-success">Active</span>
+                        <span class="text-danger fw-semibold">Inactive</span>
                     @endif
-                </td>
-            </tr>
-        </table>
+                </div>
+            </div>
+
+        </div>
 
     </div>
 </div>

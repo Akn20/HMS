@@ -47,7 +47,7 @@
                             <th>Organization</th>
                             <th>Email</th>
                             <th>Status</th>
-                            <th class="text-end">Actions</th>
+                            <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -59,7 +59,8 @@
                             <td>{{ $institution->organization_id ?? '-' }}</td>
                             <td>{{ $institution->email }}</td>
                             <td>
-                                @if($institution->status == 'Active')
+                                @if($institution->status)
+
                                     <span class="badge bg-soft-success text-success">Active</span>
                                 @else
                                     <span class="badge bg-soft-danger text-danger">Inactive</span>
@@ -100,6 +101,21 @@
                                             <i class="feather feather-trash-2"></i>
                                         </button>
                                     </form>
+
+                                    <!--Status Toggle-->
+                                                       <form action="{{ route('institutions.toggleStatus', $institution->id) }}"
+      method="POST" class="d-inline">
+    @csrf
+    @method('PATCH')
+
+    <button type="submit"
+        class="status-toggle {{ $institution->status ? 'active' : 'inactive' }}">
+        <span>
+            {{ $institution->status ? 'Deactivate' : 'Activate' }}
+        </span>
+    </button>
+</form>
+
 
                                 </div>
                             </td>
