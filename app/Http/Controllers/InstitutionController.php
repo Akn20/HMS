@@ -68,6 +68,9 @@ class InstitutionController extends Controller
     /**
      * Store Institution
      */
+    /**
+     * Store Institutions
+     */
 
     public function store(Request $request)
     {
