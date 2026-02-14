@@ -9,36 +9,43 @@ use Illuminate\Support\Str;
 class Module extends Model
 {
     protected $fillable = [
-    'module_label',
-    'module_display_name',
-    'parent_module',
-    'priority',
-    'icon',
-    'file_url',
-    'page_name',
-    'type',
-    'access_for'
-];
+        'module_label',
+        'module_display_name',
+        'parent_module',
+        'priority',
+        'icon',
+        'file_url',
+        'page_name',
+        'type',
+        'access_for'
+    ];
 
 
-public $incrementing = false;
-protected $keyType = 'string';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
-protected static function boot()
-{
-    parent::boot();
+    protected static function boot()
+    {
+        parent::boot();
 
-    static::creating(function ($model) {
-        if (!$model->getKey()) {
-            $model->{$model->getKeyName()} = (string) Str::uuid();
-        }
-    });
-}
+        static::creating(function ($model) {
+            if (!$model->getKey()) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
 
-public function institutions()
-{
-    return $this->belongsToMany(Institution::class);
-}
+
+    public function institutions()
+    {
+        return $this->belongsToMany(
+            Institution::class,
+            'institution_module',
+            'module_id',
+            'institution_id'
+        );
+    }
+
 
 
 }

@@ -17,7 +17,7 @@ class OrganizationController extends Controller
         // Search
         if ($request->search) {
             $query->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('email', 'like', '%' . $request->search . '%');
+                ->orWhere('email', 'like', '%' . $request->search . '%');
         }
 
         $organizations = $query->latest()->paginate(10);
@@ -39,14 +39,31 @@ class OrganizationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'nullable|email',
+            'name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+            'type' => 'required|in:Private,Trust,Government',
+            'registration_number' => 'nullable|string|max:100',
+            'gst' => 'nullable|string|max:15',
+            'contact_number' => 'required|digits:10',
+            'email' => 'required|email|max:255',
+
+            'admin_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+            'admin_email' => 'required|email|max:255',
+            'admin_mobile' => 'required|digits:10',
+
+            'plan_type' => 'required|in:Basic,Standard,Premium',
+            'status' => 'required|boolean',
+
+            'address' => 'required|string|max:500',
+            'city' => 'required|string|max:100|regex:/^[A-Za-z\s]+$/',
+            'state' => 'required|string|max:100|regex:/^[A-Za-z\s]+$/',
+            'country' => 'required|string|max:100|regex:/^[A-Za-z\s]+$/',
+            'pincode' => 'required|digits:6',
         ]);
 
         Organization::create($request->all());
 
         return redirect()->route('organization.index')
-                         ->with('success', 'Organization Created Successfully');
+            ->with('success', 'Organization Created Successfully');
     }
 
     /**
@@ -74,7 +91,7 @@ class OrganizationController extends Controller
         $organization->update($request->all());
 
         return redirect()->route('organization.index')
-                         ->with('success', 'Organization Updated Successfully');
+            ->with('success', 'Organization Updated Successfully');
     }
 
     /**
@@ -86,7 +103,7 @@ class OrganizationController extends Controller
         $organization->delete(); // soft delete
 
         return redirect()->route('organization.index')
-                         ->with('success', 'Organization Deleted Successfully');
+            ->with('success', 'Organization Deleted Successfully');
     }
 
     /**
@@ -108,7 +125,7 @@ class OrganizationController extends Controller
         $organization->restore();
 
         return redirect()->route('organization.deleted')
-                         ->with('success', 'Organization Restored Successfully');
+            ->with('success', 'Organization Restored Successfully');
     }
 
     /**
@@ -120,7 +137,7 @@ class OrganizationController extends Controller
         $organization->forceDelete();
 
         return redirect()->route('organization.deleted')
-                         ->with('success', 'Organization Permanently Deleted');
+            ->with('success', 'Organization Permanently Deleted');
     }
 
     /**
@@ -134,13 +151,13 @@ class OrganizationController extends Controller
     }
 
     public function toggleStatus($id)
-{
-    $Organization = Organization::findOrFail($id);
-    $Organization->status = !$Organization->status;
-    $Organization->save();
+    {
+        $Organization = Organization::findOrFail($id);
+        $Organization->status = !$Organization->status;
+        $Organization->save();
 
-    return back();
-}
+        return back();
+    }
 
     public function apiIndex()
     {

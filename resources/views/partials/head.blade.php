@@ -14,19 +14,21 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/css/daterangepicker.min.css') }}" />
 
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/theme.min.css') }}" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
 <style>
-    .nxl-container{
+    .nxl-container {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
     }
 
-    .nxl-content{
+    .nxl-content {
         flex: 1;
     }
-    
-    .footer{
+
+    .footer {
         margin-top: auto;
     }
-
 </style>
