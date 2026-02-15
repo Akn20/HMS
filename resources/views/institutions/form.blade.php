@@ -232,9 +232,27 @@
 
                     <div class="col-md-4">
                         <label>Subscription Plan</label>
-                        <input type="text" name="subscription_plan" class="form-control"
-                            value="{{ old('subscription_plan', $institution->subscription_plan ?? '') }}">
+                        <select name="subscription_plan" class="form-control">
+                            <option value="">Select Plan</option>
+
+                            <option value="Basic" {{ old('subscription_plan', $institution->subscription_plan ?? '') == 'Basic' ? 'selected' : '' }}>
+                                Basic
+                            </option>
+
+                            <option value="Standard" {{ old('subscription_plan', $institution->subscription_plan ?? '') == 'Standard' ? 'selected' : '' }}>
+                                Standard
+                            </option>
+
+                            <option value="Premium" {{ old('subscription_plan', $institution->subscription_plan ?? '') == 'Premium' ? 'selected' : '' }}>
+                                Premium
+                            </option>
+
+                            <option value="Enterprise" {{ old('subscription_plan', $institution->subscription_plan ?? '') == 'Enterprise' ? 'selected' : '' }}>
+                                Enterprise
+                            </option>
+                        </select>
                     </div>
+
 
                 </div>
             </div>
@@ -261,11 +279,36 @@
                             value="{{ old('invoice_frequency', $institution->invoice_frequency ?? '') }}">
                     </div>
 
-                    <div class="col-md-3">
+
+                    <div class="col-md-4">
                         <label>Payment Mode</label>
-                        <input type="text" name="payment_mode" class="form-control"
-                            value="{{ old('payment_mode', $institution->payment_mode ?? '') }}">
+                        <select name="payment_mode" class="form-control">
+                            <option value="">Select Payment Mode</option>
+
+                            <option value="Cash" {{ old('payment_mode', $institution->payment_mode ?? '') == 'Cash' ? 'selected' : '' }}>
+                                Cash
+                            </option>
+
+                            <option value="Online" {{ old('payment_mode', $institution->payment_mode ?? '') == 'Online' ? 'selected' : '' }}>
+                                Online
+                            </option>
+
+                            <option value="Cheque" {{ old('payment_mode', $institution->payment_mode ?? '') == 'Cheque' ? 'selected' : '' }}>
+                                Cheque
+                            </option>
+
+                            <option value="UPI" {{ old('payment_mode', $institution->payment_mode ?? '') == 'UPI' ? 'selected' : '' }}>
+                                UPI
+                            </option>
+
+                            <option value="Bank Transfer" {{ old('payment_mode', $institution->payment_mode ?? '') == 'Bank Transfer' ? 'selected' : '' }}>
+                                Bank Transfer
+                            </option>
+
+                        </select>
                     </div>
+
+
 
                     <div class="col-md-3">
                         <label>Invoice Amount</label>
@@ -275,9 +318,31 @@
 
                     <div class="col-md-3">
                         <label>Payment Status</label>
-                        <input type="text" name="payment_status" class="form-control"
-                            value="{{ old('payment_status', $institution->payment_status ?? '') }}">
+                        <select name="payment_status" class="form-control">
+                            <option value="">Select Status</option>
+
+                            <option value="Pending" {{ old('payment_status', $institution->payment_status ?? '') == 'Pending' ? 'selected' : '' }}>
+                                Pending
+                            </option>
+
+                            <option value="Paid" {{ old('payment_status', $institution->payment_status ?? '') == 'Paid' ? 'selected' : '' }}>
+                                Paid
+                            </option>
+
+                            <option value="Partially Paid" {{ old('payment_status', $institution->payment_status ?? '') == 'Partially Paid' ? 'selected' : '' }}>
+                                Partially Paid
+                            </option>
+
+                            <option value="Overdue" {{ old('payment_status', $institution->payment_status ?? '') == 'Overdue' ? 'selected' : '' }}>
+                                Overdue
+                            </option>
+
+                            <option value="Cancelled" {{ old('payment_status', $institution->payment_status ?? '') == 'Cancelled' ? 'selected' : '' }}>
+                                Cancelled
+                            </option>
+                        </select>
                     </div>
+
 
                     <div class="col-md-3">
                         <label>Payment Received</label>
