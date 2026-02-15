@@ -170,7 +170,28 @@ class OrganizationController extends Controller
     public function apiStore(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+            'type' => 'required|in:Private,Trust,Government',
+            'registration_number' => 'nullable|string|max:100',
+            'gst' => 'nullable|string|max:15',
+            'contact_number' => 'required|digits:10',
+            'email' => 'required|email|max:255',
+
+            'admin_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+            'admin_email' => 'required|email|max:255',
+            'admin_mobile' => 'required|digits:10',
+
+            'plan_type' => 'required|in:Basic,Standard,Premium',
+            'status' => 'required|boolean',
+
+            'address' => 'required|string|max:500',
+            'city' => 'required|string|max:100|regex:/^[A-Za-z\s]+$/',
+            'state' => 'required|string|max:100|regex:/^[A-Za-z\s]+$/',
+            'country' => 'required|string|max:100|regex:/^[A-Za-z\s]+$/',
+            'pincode' => 'required|digits:6',
+
+
+
         ]);
 
         $org = \App\Models\Organization::create($request->all());
