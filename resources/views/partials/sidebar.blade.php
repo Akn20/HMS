@@ -13,7 +13,7 @@
                 <li class="nxl-item nxl-caption">
                     <label>Navigation</label>
                 </li>
-                
+
                 {{-- ================= ORGANIZATION ================= --}}
                 <li class="nxl-item nxl-hasmenu">
                     <a href="javascript:void(0);" class="nxl-link">
@@ -58,11 +58,11 @@
 
                 {{-- ================= MODULE MANAGEMENT ================= --}}
                 <li class="nxl-item">
-    <a href="{{ route('modules.index') }}" class="nxl-link">
-        <span class="nxl-micon"><i class="feather-grid"></i></span>
-        <span class="nxl-mtext">Module Management</span>
-    </a>
-</li>
+                    <a href="{{ route('modules.index') }}" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-grid"></i></span>
+                        <span class="nxl-mtext">Modules</span>
+                    </a>
+                </li>
 
                 <!-- Religion -->
                 <li class="nxl-item">

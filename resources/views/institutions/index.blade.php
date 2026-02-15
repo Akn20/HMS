@@ -54,7 +54,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $institution->name }}</td>
-                                    <td>{{ $institution->organization_id ?? '-' }}</td>
+                                    <td>{{ $institution->organization->name ?? '-' }}</td>
                                     <td>{{ $institution->email }}</td>
                                     <td>
                                         @if($institution->status)
