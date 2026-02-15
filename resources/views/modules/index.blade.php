@@ -32,11 +32,15 @@
                     </a>
                 </div>
                 <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
-                    <a href="javascript:void(0);" class="btn btn-icon btn-light-brand" data-bs-toggle="collapse"
-                        data-bs-target="#collapseOne">
-                        <i class="feather-bar-chart"></i>
-                    </a>
 
+
+                    <form method="GET" action="{{ route('modules.index') }}" class="d-flex">
+                        <input type="text" name="search" class="form-control form-control-sm me-2"
+                            placeholder="Search Module" value="{{ request('search') }}">
+                        <button class="btn btn-light-brand btn-sm">
+                            <i class="feather-search"></i>
+                        </button>
+                    </form>
 
                     <a href="{{ route('modules.create') }}" class="btn btn-primary">
                         <i class="feather-plus me-2"></i>
@@ -124,16 +128,8 @@
                             <table class="table table-hover" id="proposalList">
                                 <thead>
                                     <tr>
-                                        <th class="wd-30">
-                                            <div class="btn-group mb-1">
-                                                <div class="custom-control custom-checkbox ms-1">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                        id="checkAllProposal">
-                                                    <label class="custom-control-label" for="checkAllProposal"></label>
-                                                </div>
-                                            </div>
-                                        </th>
-                                        <th>S.N</th>
+
+                                        <th>SL.NO</th>
                                         <th>Module Label</th>
                                         <th>Display Name</th>
                                         <th>Parent</th>
@@ -152,14 +148,7 @@
                                         @foreach($modules as $index => $module)
                                             <tr>
 
-                                                <!-- Checkbox -->
-                                                <td>
-                                                    <div class="custom-control custom-checkbox ms-1">
-                                                        <input type="checkbox" class="custom-control-input"
-                                                            id="check{{ $module->id }}">
-                                                        <label class="custom-control-label" for="check{{ $module->id }}"></label>
-                                                    </div>
-                                                </td>
+
 
                                                 <!-- Serial Number -->
                                                 <td>{{ $index + 1 }}</td>
@@ -230,9 +219,10 @@
                                                             @csrf
                                                             @method('PATCH')
 
-                                                            <button type="submit" class="status-toggle 
-                                                                            {{ $module->status ? 'active' : 'inactive' }}">
-                                                                <span>{{ $module->status ? 'Deactivate' : 'Activate' }}</span>
+                                                            <button type="submit"
+                                                                class="status-toggle 
+                                                                                                                                                    {{ $module->status ? 'active' : 'inactive' }}">
+                                                                <span>{{ $module->status ? 'Deactivate' : 'Deactivate' }}</span>
                                                             </button>
                                                         </form>
 

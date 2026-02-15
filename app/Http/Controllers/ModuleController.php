@@ -8,12 +8,25 @@ use Illuminate\Validation\Rule;
 class ModuleController extends Controller
 {
     // Show Module List
-    public function index()
+    public function index(Request $request)
     {
-        $modules = Module::orderBy('priority')->get();
+        $query = Module::orderBy('priority');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('module_label', 'like', "%$search%")
+                    ->orWhere('module_display_name', 'like', "%$search%")
+                    ->orWhere('file_url', 'like', "%$search%")
+                    ->orWhere('page_name', 'like', "%$search%");
+            });
+        }
+
+        $modules = $query->get();
+
         return view('modules.index', compact('modules'));
     }
-
     // Show Create Module Form
     public function create()
     {

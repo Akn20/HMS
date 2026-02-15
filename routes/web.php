@@ -32,7 +32,8 @@ Route::delete('/organization/force-delete/{id}', [OrganizationController::class,
 // Resource route (ONLY ONCE)
 Route::resource('organization', OrganizationController::class);
 
-Route::patch('organization/{id}/toggle-status',
+Route::patch(
+    'organization/{id}/toggle-status',
     [OrganizationController::class, 'toggleStatus']
 )->name('organization.toggleStatus');
 
@@ -43,7 +44,7 @@ Route::patch('organization/{id}/toggle-status',
 | Institutions
 |--------------------------------------------------------------------------
 */
-
+Route::get('/', [InstitutionController::class, 'index']);
 // Deleted list
 Route::get('/institutions/deleted', [InstitutionController::class, 'deleted'])
     ->name('institutions.deleted');
@@ -61,7 +62,8 @@ Route::delete('/institutions/force-delete/{id}', [InstitutionController::class, 
 // Resource route
 Route::resource('institutions', InstitutionController::class);
 
-Route::patch('institutions/{id}/toggle-status',
+Route::patch(
+    'institutions/{id}/toggle-status',
     [InstitutionController::class, 'toggleStatus']
 )->name('institutions.toggleStatus');
 
@@ -72,6 +74,7 @@ Route::patch('institutions/{id}/toggle-status',
 | Modules
 |--------------------------------------------------------------------------
 */
+Route::get('/', [ModuleController::class, 'index']);
 Route::get('modules/deleted', [ModuleController::class, 'deleted'])
     ->name('modules.deleted');
 
@@ -82,6 +85,8 @@ Route::delete('modules/force-delete/{id}', [ModuleController::class, 'forceDelet
     ->name('modules.forceDelete');
 Route::resource('modules', ModuleController::class);
 
-Route::patch('modules/{id}/toggle-status',
-    [ModuleController::class, 'toggleStatus'])
+Route::patch(
+    'modules/{id}/toggle-status',
+    [ModuleController::class, 'toggleStatus']
+)
     ->name('modules.toggleStatus');
