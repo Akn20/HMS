@@ -33,3 +33,4 @@ class Otp extends Model
         'last_sent_at'
     ];
 }
+

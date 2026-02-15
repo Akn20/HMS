@@ -6,30 +6,25 @@ use App\Http\Controllers\Controller;
 use App\Models\Roles;
 use App\Models\User;
 
+use Illuminate\Database\Eloquent\Attributes\UseResource;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $authUser = auth()->user();
-        if ($authUser->role->name !== 'admin') {
-            return response()->json([
-                'message' => 'Only admin can view the details'
-            ], 403);
-        }
-        $users = User::with('role')->where('deleted_at', null)->get();
-        return response()->json($users);
+        $users = User::with('role')->where('deleted_at', null)->latest()->paginate(10);
+        return view('admin.users.index', compact('users'));
+    }
+
+    public function create()
+    {
+        $roles = Roles::where('status', 'active')->get();
+        return view('admin.users.create', compact('roles'));
     }
     public function store(Request $request)
     {
 
-        $authUser = auth()->user();
-        if ($authUser->role->name !== 'admin') {
-            return response()->json([
-                'message' => 'Only admin can change the details'
-            ], 403);
-        }
         $request->validate([
             'name' => 'required|string',
             'mobile' => 'required|digits:10|unique:users,mobile',
@@ -45,17 +40,16 @@ class UserController extends Controller
             'status' => $request->status
         ]);
 
-        return response()->json(['message' => 'User created successfully']);
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully');
+    }
+
+    public function edit(User $user){
+        $roles = Roles::where('status', 'active')->get();
+        return view('admin.users.edit', compact('roles', 'user'));
     }
 
     public function update(Request $request, $id)
     {
-        $authUser = auth()->user();
-        if ($authUser->role->name !== 'admin') {
-            return response()->json([
-                'message' => 'Only admin can change the details'
-            ], 403);
-        }
         $user = User::findOrFail($id);
 
         $request->validate([
@@ -67,71 +61,48 @@ class UserController extends Controller
 
         $user->update($request->only('name', 'mobile', 'email', 'role_id', 'status'));
 
-        return response()->json(['message' => 'User updated successfully']);
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully');
     }
 
     public function destroy($id)
     {
-        $authUser = auth()->user();
-        if ($authUser->role->name !== 'admin') {
-            return response()->json([
-                'message' => 'Only admin can Delete Users'
-            ], 403);
-        }
         $user = User::findOrFail($id);
         if(!$user){
-            return response()->json(['message' => 'User not found'], 404);
+            return redirect()->back()->with('error', 'User not found');
         }
         $user->delete();
 
-        return response()->json(['message' => 'User deleted successfully']);
+        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully');
     }
-    
-    public function displayDeletedUsers(){
-        $authUser = auth()->user();
-        if ($authUser->role->name !== 'admin') {
-            return response()->json([
-                'message' => 'Only admin can Delete Users'
-            ], 403);
-        }
-        $deletedUsers = User::withTrashed()->whereNotNull('deleted_at')->get();
-        if($deletedUsers->isEmpty()){
-            return response()->json(['message' => 'No deleted users found'], 404);
-        }   
-        return response()->json($deletedUsers);
+
+    public function displayDeletedUser(){
+        
+        $users = User::withTrashed()->where(    'deleted_at', '!=', null)->latest()->paginate(10);
+       // if($deletedUsers->isEmpty()){
+        //     return redirect()->back()->with('error', 'No deleted users found');
+        // }   
+        return view('admin.users.deleted', compact('users'));
     }
 
     public function restore($id)
     {
-        $authUser = auth()->user();
-        if ($authUser->role->name !== 'admin') {
-            return response()->json([
-                'message' => 'Only admin can Restore Users'
-            ], 403);
-        }
         $user = User::withTrashed()->findOrFail($id);
         if(!$user){
-            return response()->json(['message' => 'User not found'], 404);
+            return redirect()->back()->with('error', 'User not found');
         }
         $user->restore();
 
-        return response()->json(['message' => 'User restored successfully']);
+        return redirect()->route('admin.users.index')->with('success', 'User restored successfully');
     }
 
     public function forceDeleteUser($id)
     {
-        $authUser = auth()->user();
-        if ($authUser->role->name !== 'admin') {
-            return response()->json([
-                'message' => 'Only admin can Permanently Delete Users'
-            ], 403);
-        }
         $user = User::withTrashed()->findOrFail($id);
         if(!$user){
-            return response()->json(['message' => 'User not found'], 404);
+            return redirect()->back()->with('error', 'User not found');
         }
         $user->forceDelete();
-        return response()->json(['message' => 'User permanently deleted']);
+        return redirect()->route('admin.users.deleted')->with('success', 'User permanently deleted');
     }
 }
 

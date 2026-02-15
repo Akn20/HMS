@@ -1,53 +1,42 @@
 <?php
-
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Auth\SignInController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\SignInController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RoleController;
 
-Route::view('/', 'dashboard.index')->name('dashboard');
-// Login page
-Route::view('/login', 'auth.login')->name('login');
 
-// Forgot MPIN page
+
+Route::view('/', 'auth.login')->name('login');
 Route::view('/forgot-mpin', 'auth.forgot-mpin')->name('forgot.mpin');
-
-// OTP verification page
+Route::view('/set-mpin', 'auth.set-mpin')->name('set.mpin');
 Route::view('/otp', 'auth.otp')->name('otp');
 
-// Set / Reset MPIN page (we’ll create UI later)
-Route::view('/set-mpin', 'auth.set-mpin')->name('set.mpin');
-
-
-                        /**------Apis--------**/
+/**------Apis--------**/
 Route::post('/login', [SignInController::class, 'login'])->name('login.submit');
 Route::post('/send-otp', [SignInController::class, 'sendOtp'])->name('forgot.mpin.submit');
 Route::post('/resend-otp', [SignInController::class, 'resendOtp'])->name('otp.resend');
 Route::post('/verify-otp', [SignInController::class, 'verifyOtp'])->name('otp.verify');
 Route::post('/set-mpin', [SignInController::class, 'setMpin'])->name('mpin.store');
 
-                /**---------Authenticated Apis-----------  */
-Route::middleware('auth')->group(function () {
+/**---------Authenticated Apis-----------  */
+Route::middleware(['auth','admin'])->group(function () {
 
-    // Users (Admin only)
-    Route::get('/users', [UserController::class, 'index']);
-    Route::post('/users', [UserController::class, 'store']);
-    Route::post('/users/{id}', [UserController::class, 'update']);
-    Route::delete('/users/{id}', [UserController::class, 'destroy']);
-    Route::get('/deleted-users', [UserController::class, 'displayDeletedUsers']);
-    Route::post('/restore-user/{id}', [UserController::class, 'restore']);
-    Route::delete('/force-delete-user/{id}', [UserController::class, 'forceDeleteUser']);
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::resource('roles', RoleController::class)->except(['show']);
+        Route::resource('users', UserController::class)->except(['show']);
 
-    // Roles (Admin only)    
-    Route::get('/roles', [RoleController::class, 'index']);
-    Route::post('/role', [RoleController::class, 'store']);
-    Route::post('/roles/{id}', [RoleController::class, 'update']);
-    Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
-    Route::get('/deleted-roles', [RoleController::class, 'displayDeletedRoles']);
-    Route::post('/restore-role/{id}', [RoleController::class, 'restore']);
-    Route::delete('/force-delete-role/{id}', [RoleController::class, 'forceDeleteRole']);
-    
+        Route::view('dashboard', 'admin.dashboard.index')->name('dashboard');
+        
+        Route::get('users/deleted', [UserController::class, 'displayDeletedUser'])->name('users.deleted');
+        Route::put('users/restore/{id}', [UserController::class, 'restore'])->name('users.restore');
+        Route::delete('users/force-delete/{id}', [UserController::class, 'forceDeleteUser'])->name('users.forceDelete');
+        
+        Route::get('roles/deleted', [RoleController::class, 'DisplayDeletedRoles'])->name('roles.deleted');
+        Route::put('roles/restore/{id}', [RoleController::class, 'restore'])->name('roles.restore');
+        Route::delete('roles/force-delete/{id}', [RoleController::class, 'forceDeleteRole'])->name('roles.forceDelete');
+    });
+
+
     // Logout
-    Route::post('/logout', [SignInController::class, 'logout']);
+    Route::post('/logout', [SignInController::class, 'logout'])->name('logout');
 });
-

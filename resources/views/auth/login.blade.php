@@ -27,6 +27,16 @@
                                 {{ session('error') }}
                             </div>
                         @endif
+                        @error('mobile')
+                            <div class="alert alert-danger">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                        @error('mpin')
+                            <div class="alert alert-danger">
+                                {{ $message }}
+                            </div>
+                        @enderror
                         <form method="POST" action="{{ route('login.submit') }}" class="w-100 mt-4 pt-2">
                             @csrf
 

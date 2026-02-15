@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Otp;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
@@ -17,9 +18,15 @@ class SignInController extends Controller
     {
 
         $request->validate([
-            'mobile' => 'required|digits:10',
-            'mpin' => 'required|digits_between:4,6'
-        ]);
+        'mobile' => 'required|digits:10',
+        'mpin' => 'required|digits_between:4,6',
+    ],
+    [
+        'mobile.required' => 'Mobile number is required.',
+        'mobile.digits' => 'Mobile number must be exactly 10 digits.',
+        'mpin.required' => 'MPIN is required.',
+        'mpin.digits_between' => 'MPIN must be 4 to 6 digits.',
+    ]);
 
         $user = User::where('mobile', $request->mobile)->first();
 
@@ -49,18 +56,20 @@ class SignInController extends Controller
             }
 
             // return response()->json(['message' => 'Invalid credentials2'], 401);
-            return back()->with('error', 'Invalid MPIN. Please try again.');
+            return back()->with('error', 'Invalid Credentials. Please try again.');
         }
 
         $user->update(['failed_attempts' => 0]);
 
-        $token = $user->createToken('auth')->plainTextToken;
+        // $token = $user->createToken('auth')->plainTextToken;
+        Auth::login($user);
+        $request->session()->regenerate();
 
         // return response()->json([
         //     'token' => $token,
         //     'user' => $user
         // ]);
-        return redirect()->route('dashboard')
+        return redirect()->route('admin.dashboard')
             ->with('success', 'Login successful');
     }
 
@@ -233,8 +242,9 @@ public function verifyOtp(Request $request)
     // Logout (from any page, requires auth)
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-
+       Auth::logout();
+$request->session()->invalidate();
+$request->session()->regenerateToken();
         // return response()->json([
         //     'message' => 'Logged out successfully'
         // ]);

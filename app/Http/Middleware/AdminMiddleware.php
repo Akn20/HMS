@@ -6,19 +6,21 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckRoleStatus
+class AdminMiddleware
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
-    {
-       if ($request->user()->role->status !== 'active') {
-        return response()->json(['message' => 'Role inactive'], 403);
+    public function handle($request, Closure $next)
+{
+    if (!auth()->check() || !auth()->user()->role || auth()->user()->role->name !== 'admin') {
+        return redirect()->route('admin.dashboard')
+            ->with('error', 'Only admin can access this section');
     }
 
     return $next($request);
-    }
+}
+
 }
