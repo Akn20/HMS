@@ -12,7 +12,7 @@ class InstitutionController extends Controller
 
 
     /**
-     * Institution List Page
+     * Institution List Pag
      */
     public function index(Request $request)
     {
