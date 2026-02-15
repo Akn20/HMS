@@ -205,13 +205,13 @@
                             <p>{{ $institution->payment_date ?? '-' }}</p>
                         </div>
                         <div class="col-md-3"><label>Payment Received</label>
-                          <p>
-                            @if($institution->payment_received)
-                                <span class="badge bg-success">Yes</span>
-                            @else
-                                <span class="badge bg-danger">No</span>
-                            @endif
-                          </p>
+                            <p>
+                                @if($institution->payment_received)
+                                    <span class="badge bg-success">Yes</span>
+                                @else
+                                    <span class="badge bg-danger">No</span>
+                                @endif
+                            </p>
                         </div>
                         <div class="col-md-3"><label>Transaction Ref</label>
                             <p>{{ $institution->transaction_reference ?? '-' }}</p>
@@ -221,42 +221,50 @@
                 </div>
             </div>
             {{-- ================= 4. LEGAL & COMMERCIAL ================= --}}
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5>4. Legal & Commercial</h5>
-                </div>
-                <div class="card-body row g-3">
-
-                    <div class="col-md-4">
-                        <label>MOU Copy</label>
-                        <p>{{ $institution->mou_copy ?? '-' }}</p>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>4. Legal & Commercial</h5>
                     </div>
+                    <div class="card-body row g-3">
 
-                    <div class="col-md-4">
-                        <label>PO Number</label>
-                        <p>{{ $institution->po_number ?? '-' }}</p>
+                        <div class="col-md-4">
+                            <label>MOU Copy</label><br>
+
+                            @if($institution->mou_copy)
+                                <a href="{{ asset($institution->mou_copy) }}" target="_blank">
+                                    View MOU
+                                </a>
+                            @else
+                                <p>-</p>
+                            @endif
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <label>PO Number</label>
+                            <p>{{ $institution->po_number ?? '-' }}</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>PO Start Date</label>
+                            <p>{{ $institution->po_start_date ?? '-' }}</p>
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>PO End Date</label>
+                            <p>{{ $institution->po_end_date ?? '-' }}</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Subscription Plan</label>
+                            <p>{{ $institution->subscription_plan ?? '-' }}</p>
+                        </div>
+
                     </div>
-
-                    <div class="col-md-4">
-                        <label>PO Start Date</label>
-                        <p>{{ $institution->po_start_date ?? '-' }}</p>
-                           
-                    </div>
-
-                    <div class="col-md-4">
-                        <label>PO End Date</label>
-                <p>{{ $institution->po_end_date ?? '-' }}</p>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label>Subscription Plan</label>
-                        <p>{{ $institution->subscription_plan ?? '-' }}</p>
-                    </div>
-
                 </div>
             </div>
-        </div>
 
 
             {{-- ================= 5. SUPPORT ================= --}}
