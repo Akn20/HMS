@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 use App\Models\Module;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ModuleController extends Controller
 {
-     // Show Module List
+    // Show Module List
     public function index()
     {
         $modules = Module::orderBy('priority')->get();
@@ -14,24 +15,24 @@ class ModuleController extends Controller
     }
 
     // Show Create Module Form
-   public function create()
+    public function create()
     {
         $modules = Module::all(); // get existing modules
         return view('modules.create', compact('modules'));
     }
 
-//Store Module
- public function store(Request $request)
+    //Store Module
+    public function store(Request $request)
     {
         $request->validate([
-            'module_label' => 'required|unique:modules',
-            'module_display_name' => 'required',
-            'priority' => 'integer',
-            'icon' => 'required',
-            'file_url' => 'required',
-            'page_name' => 'required',
-            'type' => 'required',
-            'access_for' => 'required'
+            'module_label' => 'required|string|max:100|unique:modules,module_label',
+            'module_display_name' => 'required|string|max:150',
+            'priority' => 'required|integer|min:1',
+            'icon' => 'required|string|max:100',
+            'file_url' => 'required|string|max:255',
+            'page_name' => 'required|string|max:255',
+            'type' => 'required|in:Web,App,Both',
+            'access_for' => 'required|in:institution,service'
 
         ]);
 
@@ -47,7 +48,7 @@ class ModuleController extends Controller
         $module->delete();
 
         return redirect()->route('modules.index')
-                        ->with('success', 'Module moved to trash.');
+            ->with('success', 'Module moved to trash.');
     }
 
 
@@ -62,7 +63,7 @@ class ModuleController extends Controller
         Module::withTrashed()->find($id)->restore();
 
         return redirect()->route('modules.deleted')
-                        ->with('success', 'Module restored successfully.');
+            ->with('success', 'Module restored successfully.');
     }
 
     public function forceDelete($id)
@@ -70,7 +71,7 @@ class ModuleController extends Controller
         Module::withTrashed()->find($id)->forceDelete();
 
         return redirect()->route('modules.deleted')
-                        ->with('success', 'Module permanently deleted.');
+            ->with('success', 'Module permanently deleted.');
     }
 
     public function show($id)
@@ -87,26 +88,44 @@ class ModuleController extends Controller
         return view('modules.edit', compact('module', 'modules'));
     }
 
-   public function update(Request $request, $id)
+
+
+    public function update(Request $request, $id)
     {
         $module = Module::findOrFail($id);
 
         $request->validate([
-            'module_label' => 'required|unique:modules,module_label,' . $id,
-            'module_display_name' => 'required',
-            'priority' => 'integer',
-            'icon' => 'required',
-            'file_url' => 'required',
-            'page_name' => 'required',
-            'type' => 'required',
-            'access_for' => 'required'
+            'module_label' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('modules', 'module_label')->ignore($module->id),
+            ],
+            'module_display_name' => 'required|string|max:150',
+            'priority' => 'required|integer|min:1',
+            'icon' => 'required|string|max:100',
+            'file_url' => 'required|string|max:255',
+            'page_name' => 'required|string|max:255',
+            'type' => 'required|in:Web,App,Both',
+            'access_for' => 'required|in:institution,service'
         ]);
 
-        $module->update($request->all());
+        $module->update($request->only([
+            'module_label',
+            'module_display_name',
+            'parent_module',
+            'priority',
+            'icon',
+            'file_url',
+            'page_name',
+            'type',
+            'access_for'
+        ]));
 
         return redirect()->route('modules.index')
-                        ->with('success', 'Module updated successfully!');
+            ->with('success', 'Module updated successfully!');
     }
+
 
     public function toggleStatus($id)
     {
@@ -132,10 +151,20 @@ class ModuleController extends Controller
     public function apiStore(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'module_label' => 'required|string|max:100|unique:modules,module_label',
         ]);
 
-        $module = \App\Models\Module::create($request->all());
+        $module = \App\Models\Module::create($request->only([
+            'module_label',
+            'module_display_name',
+            'parent_module',
+            'priority',
+            'icon',
+            'file_url',
+            'page_name',
+            'type',
+            'access_for'
+        ]));
 
         return response()->json([
             'status' => true,
@@ -147,7 +176,17 @@ class ModuleController extends Controller
     public function apiUpdate(Request $request, $id)
     {
         $module = \App\Models\Module::findOrFail($id);
-        $module->update($request->all());
+        $module->update($request->only([
+            'module_label',
+            'module_display_name',
+            'parent_module',
+            'priority',
+            'icon',
+            'file_url',
+            'page_name',
+            'type',
+            'access_for'
+        ]));
 
         return response()->json([
             'status' => true,

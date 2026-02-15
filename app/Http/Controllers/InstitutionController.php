@@ -104,7 +104,7 @@ class InstitutionController extends Controller
             'status' => 'required|boolean',
 
             // Legal
-            'mou_copy' => 'nullable|string|max:255',
+            'mou_copy' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'po_number' => 'nullable|string|max:255',
             'po_start_date' => 'nullable|date',
             'po_end_date' => 'nullable|date',
@@ -138,6 +138,15 @@ class InstitutionController extends Controller
             $file->move(public_path('uploads'), $filename);
             $validated['logo'] = $filename;
         }
+
+        if ($request->hasFile('mou_copy')) {
+            $file = $request->file('mou_copy');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/mou'), $filename);
+
+            $validated['mou_copy'] = 'uploads/mou/' . $filename;
+        }
+
 
         $institution = Institution::create($validated);
 
@@ -211,7 +220,7 @@ class InstitutionController extends Controller
             'role' => 'nullable|string|max:100',
             'status' => 'required|boolean',
 
-            'mou_copy' => 'nullable|string|max:255',
+            'mou_copy' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'po_number' => 'nullable|string|max:255',
             'po_start_date' => 'nullable|date',
             'po_end_date' => 'nullable|date',
@@ -241,6 +250,14 @@ class InstitutionController extends Controller
             $file->move(public_path('uploads'), $filename);
             $validated['logo'] = $filename;
         }
+        if ($request->hasFile('mou_copy')) {
+            $file = $request->file('mou_copy');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/mou'), $filename);
+
+            $validated['mou_copy'] = 'uploads/mou/' . $filename;
+        }
+
 
         $institution->update($validated);
 

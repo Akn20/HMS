@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 
 class Module extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'module_label',
         'module_display_name',
@@ -17,7 +18,8 @@ class Module extends Model
         'file_url',
         'page_name',
         'type',
-        'access_for'
+        'access_for',
+        'status'
     ];
 
 
@@ -35,17 +37,10 @@ class Module extends Model
         });
     }
 
-
     public function institutions()
     {
-        return $this->belongsToMany(
-            Institution::class,
-            'institution_module',
-            'module_id',
-            'institution_id'
-        );
+        return $this->belongsToMany(Institution::class);
     }
-
 
 
 }

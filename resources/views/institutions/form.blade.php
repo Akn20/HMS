@@ -198,9 +198,19 @@
 
                     <div class="col-md-4">
                         <label>MOU Copy</label>
-                        <input type="text" name="mou_copy" class="form-control"
-                            value="{{ old('mou_copy', $institution->mou_copy ?? '') }}">
+
+                        @if(isset($institution) && $institution->mou_copy)
+                            <p>
+
+                                <a href="{{ asset($institution->mou_copy) }}" target="_blank">
+
+                                </a>
+                            </p>
+                        @endif
+
+                        <input type="file" name="mou_copy" class="form-control">
                     </div>
+
 
                     <div class="col-md-4">
                         <label>PO Number</label>
