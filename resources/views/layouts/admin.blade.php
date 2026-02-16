@@ -5,6 +5,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     @include('partials.head')
     <style>
+        /* Your existing toggle CSS stays here */
         .status-toggle {
             width: 100px;
             height: 30px;
@@ -21,21 +22,16 @@
             align-items: center;
         }
 
-        /* Active */
         .status-toggle.active {
             background: #28a745;
             justify-content: flex-end;
-            /* text on right */
         }
 
-        /* Inactive */
         .status-toggle.inactive {
             background: #dc3545;
             justify-content: flex-start;
-            /* text on left */
         }
 
-        /* White circle */
         .status-toggle::before {
             content: "";
             position: absolute;
@@ -47,7 +43,6 @@
             transition: 0.3s;
         }
 
-        /* Circle position */
         .status-toggle.active::before {
             left: 4px;
         }
@@ -56,37 +51,67 @@
             right: 4px;
         }
 
-        /* Keep text above */
         .status-toggle span {
             position: relative;
             z-index: 2;
         }
     </style>
-
-
 </head>
 
 <body>
-
     @include('partials.sidebar')
-
     @include('partials.navbar')
 
     <main class="nxl-container px-4">
         <div class="nxl-content">
             @yield('content')
         </div>
-
         @include('partials.footer')
     </main>
 
-
-
-    <!--! BEGIN: Vendors JS !-->
     @include('partials.scripts')
-    <!--! END: Theme Customizer !-->
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            'use strict';
 
+            // 1. Fetch the form
+            const forms = document.querySelectorAll('.needs-validation');
+
+            // 2. Loop over them and prevent submission
+            Array.from(forms).forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        // Find the first invalid element and scroll to it
+                        const firstInvalid = form.querySelector(':invalid');
+                        if (firstInvalid) {
+                            firstInvalid.focus();
+                        }
+                    }
+                    // This class makes the .invalid-feedback visible
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        });
+
+    (function() {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+
+    Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+    if (!form.checkValidity()) {
+    event.preventDefault()
+    event.stopPropagation()
+    }
+    form.classList.add('was-validated')
+    }, false)
+    })
+    })()
+    </script>
 </body>
 
 </html>
