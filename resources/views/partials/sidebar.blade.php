@@ -14,6 +14,15 @@
                     <label>Navigation</label>
                 </li>
 
+                {{-- ================= DASHBOARD ================= --}}
+
+                <li class="nxl-item nxl-hasmenu">
+                    <a href="{{ route('dashboard') }}"  class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-airplay"></i></span>
+                        <span class="nxl-mtext">Dashboard</span>
+                    </a>     
+                </li>
+
                 {{-- ================= ORGANIZATION ================= --}}
                 <li class="nxl-item nxl-hasmenu">
                     <a href="javascript:void(0);" class="nxl-link">

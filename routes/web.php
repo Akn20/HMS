@@ -4,10 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\DashboardController;
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-});
+/*
+|--------------------------------------------------------------------------
+| Dashboard
+|--------------------------------------------------------------------------
+*/
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 /*
 |--------------------------------------------------------------------------

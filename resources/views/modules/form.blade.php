@@ -4,11 +4,12 @@
     <div class="col-md-6 mb-3">
         <label class="form-label">Module Label</label>
         <input type="text"
-               class="form-control"
-               name="module_label"
-               value="{{ old('module_label', $module->module_label ?? '') }}"
-               placeholder="patient_registration"
-               required>
+       class="form-control"
+       name="module_label"
+       value="{{ old('module_label', isset($module) ? $module->module_label : '') }}"
+       placeholder="patient_registration"
+       required>
+
     </div>
 
     <!-- Module Display Name -->
