@@ -61,11 +61,11 @@
                         <tbody>
                             @foreach ($users as $index => $user)
                                 <tr>
-                                    <td>{{ $users->firstItem() + $index }}</td>
+                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ optional($user->role)->name ?? '-' }}</td>
                                     <td>
-                                        @if ($user->status ?? true)
+                                        @if($user->status == 'active')
                                             <span class="badge bg-success">Active</span>
                                         @else
                                             <span class="badge bg-secondary">Inactive</span>

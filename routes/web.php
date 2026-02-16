@@ -1,81 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\OtpController;
+use App\Http\Controllers\Auth\SignInController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 
-/*
-|--------------------------------------------------------------------------
-| Admin Routes
-|--------------------------------------------------------------------------
-| All admin pages (dashboard, users, roles) live under the /admin prefix
-| and share the "admin." route name prefix.
-*/
-Route::prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-
-        /*
-        |------------------------------------------------------------------
-        | Admin Dashboard
-        |------------------------------------------------------------------
-        */
-        Route::get('dashboard', function () {
-            return view('admin.dashboard.index', [
-                'title' => 'Admin Dashboard',
-            ]);
-        })->name('dashboard');
-
-        /*
-        |------------------------------------------------------------------
-        | User soft-delete routes
-        |------------------------------------------------------------------
-        | These handle the "Deleted Users" list, restoring, and force delete.
-        | They must come before the resource routes.
-        */
-        Route::get('users/deleted', [UserController::class, 'deleted'])
-            ->name('users.deleted');
-
-        Route::post('users/{id}/restore', [UserController::class, 'restore'])
-            ->name('users.restore');
-
-        Route::delete('users/{id}/force-delete', [UserController::class, 'forceDelete'])
-            ->name('users.forceDelete');
-
-        /*
-        |------------------------------------------------------------------
-        | Role soft-delete routes
-        |------------------------------------------------------------------
-        | These handle the "Deleted Roles" list, restoring, and force delete.
-        */
-        Route::get('roles/deleted', [RoleController::class, 'deleted'])
-            ->name('roles.deleted');
-
-        Route::post('roles/{id}/restore', [RoleController::class, 'restore'])
-            ->name('roles.restore');
-
-        Route::delete('roles/{id}/force-delete', [RoleController::class, 'forceDelete'])
-            ->name('roles.forceDelete');
-
-        /*
-        |------------------------------------------------------------------
-        | Resource routes (CRUD)
-        |------------------------------------------------------------------
-        | Standard RESTful routes for users and roles. We exclude "show"
-        | since you are using index/edit, not a separate show page.
-        */
-        Route::resource('users', UserController::class)->except(['show']);
-        Route::resource('roles', RoleController::class)->except(['show']);
-    });
-
-/*
-|--------------------------------------------------------------------------
-| Auth Views (Login & MPIN screens)
-|--------------------------------------------------------------------------
-| These routes just return views, no controller logic.
-*/
 
 // Login page
 Route::view('/', 'auth.login')->name('login');
@@ -85,45 +14,34 @@ Route::view('/forgot-mpin', 'auth.forgot-mpin')->name('forgot.mpin');
 
 // Set MPIN page
 Route::view('/set-mpin', 'auth.set-mpin')->name('set.mpin');
+Route::view('/otp', 'auth.otp')->name('otp');
 
-/*
-|--------------------------------------------------------------------------
-| Auth Actions (Login & MPIN submit handlers)
-|--------------------------------------------------------------------------
-| These routes handle form submissions for login and MPIN flows.
-*/
+/**------Apis--------**/
+Route::post('/login', [SignInController::class, 'login'])->name('login.submit');
+Route::post('/send-otp', [SignInController::class, 'sendOtp'])->name('forgot.mpin.submit');
+Route::post('/resend-otp', [SignInController::class, 'resendOtp'])->name('otp.resend');
+Route::post('/verify-otp', [SignInController::class, 'verifyOtp'])->name('otp.verify');
+Route::post('/set-mpin', [SignInController::class, 'setMpin'])->name('mpin.store');
 
-// Handle login form submit
-Route::post('/login', [AuthController::class, 'login'])
-    ->name('login.submit');
+/**---------Authenticated Apis-----------  */
+Route::middleware(['auth','admin'])->group(function () {
 
-// Handle "forgot MPIN" form submit (send OTP)
-Route::post('/forgot-mpin', [AuthController::class, 'sendOtp'])
-    ->name('forgot.mpin.submit');
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::resource('roles', RoleController::class)->except(['show']);
+        Route::resource('users', UserController::class)->except(['show']);
 
-// Handle "set MPIN" form submit
-Route::post('/set-mpin', [AuthController::class, 'storeMpin'])
-    ->name('mpin.store');
+        Route::view('dashboard', 'admin.dashboard.index')->name('dashboard');
+        
+        Route::get('users/deleted', [UserController::class, 'displayDeletedUser'])->name('users.deleted');
+        Route::put('users/restore/{id}', [UserController::class, 'restore'])->name('users.restore');
+        Route::delete('users/force-delete/{id}', [UserController::class, 'forceDeleteUser'])->name('users.forceDelete');
+        
+        Route::get('roles/deleted', [RoleController::class, 'DisplayDeletedRoles'])->name('roles.deleted');
+        Route::put('roles/restore/{id}', [RoleController::class, 'restore'])->name('roles.restore');
+        Route::delete('roles/force-delete/{id}', [RoleController::class, 'forceDeleteRole'])->name('roles.forceDelete');
+    });
 
-/*
-|--------------------------------------------------------------------------
-| OTP Routes
-|--------------------------------------------------------------------------
-| Routes used during the OTP verification flow.
-*/
 
-// Show OTP input form
-Route::get('/otp', [OtpController::class, 'showOtpForm'])
-    ->name('otp.form');
-
-// Send OTP to user (e.g. via SMS/email)
-Route::post('/send-otp', [OtpController::class, 'sendOtp'])
-    ->name('otp.send');
-
-// Verify the submitted OTP
-Route::post('/verify-otp', [OtpController::class, 'verifyOtp'])
-    ->name('otp.verify');
-
-// Resend OTP
-Route::post('/resend-otp', [OtpController::class, 'resendOtp'])
-    ->name('otp.resend');
+    // Logout
+    Route::post('/logout', [SignInController::class, 'logout'])->name('logout');
+});

@@ -3,30 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
+use App\Models\Roles;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class RoleController extends Controller
 {
-    public function index()
+    public function store(Request $request)
     {
-        // Active roles list (non-deleted)
-        $roles = Role::latest()->paginate(10);
+        $request->validate([
+            'name' => 'required|unique:roles,name',
+            'description' => 'nullable|string',
+            'status' => 'required|in:active,inactive'
+        ]);
 
-        return view('admin.roles.index', compact('roles'));
-    }
+        Roles::create($request->all());
 
-    /**
-     * Show only soft-deleted roles.
-     */
-    public function deleted()
-    {
-        $roles = Role::onlyTrashed()
-            ->latest()
-            ->paginate(10);
-
-        return view('admin.roles.deleted', compact('roles'));
+        return redirect()->route('admin.roles.index')->with('success', 'Role created successfully');
     }
 
     public function create()
@@ -34,79 +26,75 @@ class RoleController extends Controller
         return view('admin.roles.create');
     }
 
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|unique:roles,name',
-            'description' => 'nullable|string',
-            'status' => 'required|boolean',
-        ]);
-
-        Role::create([
-            'id' => (string) Str::uuid(),
-            'name' => $data['name'],
-            'description' => $data['description'] ?? null,
-            'status' => $data['status'],
-        ]);
-
-        return redirect()
-            ->route('admin.roles.index')
-            ->with('success', 'Role created successfully');
-    }
-
-    public function edit(Role $role)
+    public function edit(Roles $role)
     {
         return view('admin.roles.edit', compact('role'));
     }
 
-    public function update(Request $request, Role $role)
+    public function update(Request $request, $id)
     {
-        $data = $request->validate([
-            'name' => 'required|unique:roles,name,' . $role->id . ',id',
+        $role = Roles::findOrFail($id);
+        if(!$role){
+            return redirect()->back()->with('error', 'Role not found');
+        }
+      
+        $request->validate([
+            'name' => 'sometimes|required',
             'description' => 'nullable|string',
-            'status' => 'required|boolean',
+            'status' => 'in:active,inactive'
         ]);
 
-        $role->update($data);
+        $role->update($request->all());
 
-        return redirect()
-            ->route('admin.roles.index')
-            ->with('success', 'Role updated successfully');
+        return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully');
     }
 
-    /**
-     * Soft delete a role.
-     */
-    public function destroy(Role $role)
+    public function index()
     {
-        $role->delete(); // soft delete
-
-        return redirect()
-            ->route('admin.roles.index')
-            ->with('success', 'Role deleted successfully.');
+        $roles = Roles::orderBy('name')->where('deleted_at', null)->latest()->paginate(10); 
+        if($roles->isEmpty()){
+            return response()->json(['message' => 'No roles found'], 404);
+        }
+        return view('admin.roles.index', compact('roles'));
     }
 
-    /**
-     * Restore a soft-deleted role.
-     */
+    public function destroy($id)
+    {
+        $role = Roles::findOrFail($id);
+        if(!$role){
+            return redirect()->back()->with('error', 'Role not found');
+        }
+        $role->delete();
+        return redirect()->back()->with('success', 'Role deleted successfully');
+    }
+
+    public function displayDeletedRoles(){
+        
+        $deletedRoles = Roles::withTrashed()->whereNotNull('deleted_at')->latest()->paginate(10);
+      
+        return view('admin.roles.deleted')->with('roles', $deletedRoles);
+    }
+
     public function restore($id)
     {
-        Role::withTrashed()->where('id', $id)->restore();
+       
+        $role = Roles::withTrashed()->findOrFail($id);
+        if(!$role){
+            return redirect()->back()->with('error', 'Role not found');
+        }
+        $role->restore();
 
-        return redirect()
-            ->route('admin.roles.deleted')
-            ->with('success', 'Role restored successfully.');
-    }
+        return redirect()->route('admin.roles.deleted')->with('success', 'Role restored successfully');
+    }   
 
-    /**
-     * Permanently delete a soft-deleted role.
-     */
-    public function forceDelete($id)
-    {
-        Role::withTrashed()->findOrFail($id)->forceDelete();
+    public function forceDeleteRole($id){
+        
+        $role = Roles::withTrashed()->findOrFail($id);
+        if(!$role){
+            return redirect()->back()->with('error', 'Role not found');
+        }
+        $role->forceDelete();
 
-        return redirect()
-            ->back()
-            ->with('success', 'Role permanently deleted');
+        return redirect()->route('admin.roles.deleted')->with('success', 'Role permanently deleted successfully');
     }
 }

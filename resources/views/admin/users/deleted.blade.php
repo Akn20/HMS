@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-
+@section('page-title', 'Deleted Users')
 @section('content')
 <div class="nxl-content">
 
@@ -49,7 +49,7 @@
                                     </td>
 
                                     <td>
-                                        @if($user->status)
+                                        @if($user->status=='active')
                                             <span class="badge bg-success">Active</span>
                                         @else
                                             <span class="badge bg-secondary">Inactive</span>

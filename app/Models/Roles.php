@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Str;
 
-class Otp extends Model
+class Roles extends Model
 {
     use SoftDeletes;
-     protected $keyType = 'string';
+    protected $keyType = 'string';
     public $incrementing = false;
 
     protected static function boot()
@@ -23,14 +23,10 @@ class Otp extends Model
             }
         });
     }
-   protected $fillable = [
-        'mobile',
-        'otp',
-        'expires_at',
-        'attempts',
-        'resends',
-        'used',
-        'last_sent_at'
-    ];
-}
+    protected $fillable = ['name', 'description', 'status'];
 
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+}

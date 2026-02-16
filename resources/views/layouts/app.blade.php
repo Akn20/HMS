@@ -9,7 +9,7 @@
 <div class="d-flex">
 
     {{-- Sidebar --}}
-    @include('layouts.sidebar')
+    @include('partials.sidebar')
 
     {{-- Main Content --}}
     <div class="flex-grow-1 p-4">

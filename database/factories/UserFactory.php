@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Roles;
 use Illuminate\Database\Seeder;
 use App\Models\User;   // ← add this
-use App\Models\Role;
+
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -12,7 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create a default role
-        $role = Role::firstOrCreate(
+        $role = Roles::firstOrCreate(
             ['name' => 'Admin'],
             [
                 'id' => (string) Str::uuid(),

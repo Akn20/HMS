@@ -61,11 +61,11 @@
                         <tbody>
                             @foreach ($roles as $index => $role)
                                 <tr>
-                                    <td>{{ $roles->firstItem() ? $roles->firstItem() + $index : $index + 1 }}</td>
+                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $role->name }}</td>
                                     <td>{{ $role->description ?? '-' }}</td>
                                     <td>
-                                        @if ($role->status)
+                                        @if($role->status=="active")
                                             <span class="badge bg-success">Active</span>
                                         @else
                                             <span class="badge bg-secondary">Inactive</span>
