@@ -24,11 +24,21 @@ class JobTypeController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'job_type_code' => 'required|max:50|unique:job_type_master',
-            'job_type_name' => 'required|max:100',
-            'status' => 'required'
-        ]);
+        $request->validate(
+            [
+                'job_type_code' => 'required|max:50|unique:job_type_master,job_type_code',
+                'job_type_name' => 'required|max:100|unique:job_type_master,job_type_name',
+                'status' => 'required'
+            ],
+            [
+                'job_type_code.required' => 'Job type code is required.',
+                'job_type_code.unique' => 'Job type code already exists.',
+                'job_type_name.required' => 'Job type name is required.',
+                'job_type_name.unique' => 'Job type already exists.',
+                'status.required' => 'Please select status.'
+            ]
+        );
+
 
         JobType::create([
             'job_type_code' => $request->job_type_code,
@@ -53,11 +63,21 @@ class JobTypeController extends Controller
     {
         $jobType = JobType::findOrFail($id);
 
-        $request->validate([
-            'job_type_code' => "required|max:50|unique:job_type_master,job_type_code,$id",
-            'job_type_name' => 'required|max:100',
-            'status' => 'required'
-        ]);
+        $request->validate(
+            [
+                'job_type_code' => "required|max:50|unique:job_type_master,job_type_code,$id",
+                'job_type_name' => "required|max:100|unique:job_type_master,job_type_name,$id",
+                'status' => 'required'
+            ],
+            [
+                'job_type_code.required' => 'Job type code is required.',
+                'job_type_code.unique' => 'Job type code already exists.',
+                'job_type_name.required' => 'Job type name is required.',
+                'job_type_name.unique' => 'Job type already exists.',
+                'status.required' => 'Please select status.'
+            ]
+        );
+
 
         $jobType->update([
             'job_type_code' => $request->job_type_code,
@@ -104,28 +124,40 @@ class JobTypeController extends Controller
 
     //API
 
-    public function apiIndex()
+    public function apiIndex(Request $request)
     {
-        $data = JobType::where('status', 'Active')->get();
+        $query = JobType::query();
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $data = $query->orderBy('job_type_name')->get();
+
         return ApiResponse::success($data, 'Job types fetched');
     }
+
 
     public function apiStore(Request $request)
     {
         $request->validate([
+            'job_type_code' => 'required|max:20|unique:job_type_master,job_type_code',
             'job_type_name' => 'required|max:100',
             'status' => 'required'
         ]);
 
         $data = JobType::create([
             'id' => Str::uuid(),
+            'job_type_code' => $request->job_type_code,
             'job_type_name' => $request->job_type_name,
+            'description' => $request->description,
             'status' => $request->status,
             'created_by' => 1
         ]);
 
-        return ApiResponse::success($data, 'Job type created');
+        return ApiResponse::success($data, 'Job type created successfully');
     }
+
 
     public function apiUpdate(Request $request, $id)
     {
@@ -147,5 +179,28 @@ class JobTypeController extends Controller
 
         return ApiResponse::success(null, 'Job type deleted');
     }
+
+    public function apiDeleted()
+    {
+        $data = JobType::onlyTrashed()->get();
+        return ApiResponse::success($data, 'Deleted job types fetched');
+    }
+
+    public function apiRestore($id)
+    {
+        $data = JobType::withTrashed()->findOrFail($id);
+        $data->restore();
+
+        return ApiResponse::success($data, 'Job type restored');
+    }
+
+    public function apiForceDelete($id)
+    {
+        $data = JobType::withTrashed()->findOrFail($id);
+        $data->forceDelete();
+
+        return ApiResponse::success(null, 'Job type permanently deleted');
+    }
+
 
 }

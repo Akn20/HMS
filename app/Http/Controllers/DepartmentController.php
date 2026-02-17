@@ -133,29 +133,41 @@ class DepartmentController extends Controller
 
     //API
 
-    public function apiIndex()
+    public function apiIndex(Request $request)
     {
-        $data = Department::where('status', 1)->get();
+        $query = Department::query();
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $data = $query->orderBy('department_name')->get();
+
         return ApiResponse::success($data, 'Departments fetched');
     }
+
+
 
     public function apiStore(Request $request)
     {
         $request->validate([
             'department_name' => 'required|max:100',
+            'department_code' => 'required|max:20',
             'status' => 'required'
         ]);
 
         $data = Department::create([
             'id' => Str::uuid(),
             'department_name' => $request->department_name,
+            'department_code' => strtoupper($request->department_code),
             'description' => $request->description,
             'status' => $request->status,
             'created_by' => 1
         ]);
 
-        return ApiResponse::success($data, 'Department created');
+        return ApiResponse::success($data, 'Department created successfully');
     }
+
 
     public function apiUpdate(Request $request, $id)
     {
@@ -163,13 +175,15 @@ class DepartmentController extends Controller
 
         $data->update([
             'department_name' => $request->department_name,
+            'department_code' => strtoupper($request->department_code),
             'description' => $request->description,
             'status' => $request->status,
             'updated_by' => 1
         ]);
 
-        return ApiResponse::success($data, 'Department updated');
+        return ApiResponse::success($data, 'Department updated successfully');
     }
+
 
     public function apiDelete($id)
     {
@@ -177,6 +191,28 @@ class DepartmentController extends Controller
         $data->delete();
 
         return ApiResponse::success(null, 'Department deleted');
+    }
+
+    public function apiDeleted()
+    {
+        $data = Department::onlyTrashed()->get();
+        return ApiResponse::success($data, 'Deleted departments fetched');
+    }
+
+    public function apiRestore($id)
+    {
+        $data = Department::withTrashed()->findOrFail($id);
+        $data->restore();
+
+        return ApiResponse::success($data, 'Department restored');
+    }
+
+    public function apiForceDelete($id)
+    {
+        $data = Department::withTrashed()->findOrFail($id);
+        $data->forceDelete();
+
+        return ApiResponse::success(null, 'Department permanently deleted');
     }
 
 

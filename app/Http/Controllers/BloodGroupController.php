@@ -137,11 +137,19 @@ class BloodGroupController extends Controller
 
     //API
 
-    public function apiIndex()
+    public function apiIndex(Request $request)
     {
-        $data = BloodGroup::where('status', 'Active')->get();
+        $query = BloodGroup::query();
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $data = $query->orderBy('blood_group_name')->get();
+
         return ApiResponse::success($data, 'Blood groups fetched');
     }
+
 
     public function apiStore(Request $request)
     {
@@ -181,6 +189,27 @@ class BloodGroupController extends Controller
         return ApiResponse::success(null, 'Blood group deleted');
     }
 
+    public function apiDeleted()
+    {
+        $data = BloodGroup::onlyTrashed()->get();
+        return ApiResponse::success($data, 'Deleted blood groups fetched');
+    }
+
+    public function apiRestore($id)
+    {
+        $data = BloodGroup::withTrashed()->findOrFail($id);
+        $data->restore();
+
+        return ApiResponse::success($data, 'Blood group restored');
+    }
+
+    public function apiForceDelete($id)
+    {
+        $data = BloodGroup::withTrashed()->findOrFail($id);
+        $data->forceDelete();
+
+        return ApiResponse::success(null, 'Blood group permanently deleted');
+    }
 
 
 

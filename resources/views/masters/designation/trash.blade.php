@@ -27,7 +27,10 @@
                             <thead>
                                 <tr>
                                     <th>Sl.No.</th>
+                                    <th>Code</th>
                                     <th>Designation Name</th>
+                                    <th>Department</th>
+                                    <th>Description</th>
                                     <th>Status</th>
                                     <th class="text-end">Actions</th>
                                 </tr>

@@ -24,11 +24,21 @@ class WorkStatusController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'work_status_code' => 'required|max:50|unique:work_status_master',
-            'work_status_name' => 'required|max:100',
-            'status' => 'required'
-        ]);
+        $request->validate(
+            [
+                'work_status_code' => 'required|max:50|unique:work_status_master,work_status_code',
+                'work_status_name' => 'required|max:100|unique:work_status_master,work_status_name',
+                'status' => 'required'
+            ],
+            [
+                'work_status_code.required' => 'Work status code is required.',
+                'work_status_code.unique' => 'Work status code already exists.',
+                'work_status_name.required' => 'Work status name is required.',
+                'work_status_name.unique' => 'Work status already exists.',
+                'status.required' => 'Please select status.'
+            ]
+        );
+
 
         WorkStatus::create([
             'work_status_code' => $request->work_status_code,
@@ -51,11 +61,21 @@ class WorkStatusController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'work_status_code' => "required|max:50|unique:work_status_master,work_status_code,$id",
-            'work_status_name' => 'required|max:100',
-            'status' => 'required'
-        ]);
+        $request->validate(
+            [
+                'work_status_code' => "required|max:50|unique:work_status_master,work_status_code,$id",
+                'work_status_name' => "required|max:100|unique:work_status_master,work_status_name,$id",
+                'status' => 'required'
+            ],
+            [
+                'work_status_code.required' => 'Work status code is required.',
+                'work_status_code.unique' => 'Work status code already exists.',
+                'work_status_name.required' => 'Work status name is required.',
+                'work_status_name.unique' => 'Work status already exists.',
+                'status.required' => 'Please select status.'
+            ]
+        );
+
 
         $workStatus = WorkStatus::findOrFail($id);
 
@@ -103,28 +123,39 @@ class WorkStatusController extends Controller
     }
 
     //API
-    public function apiIndex()
+    public function apiIndex(Request $request)
     {
-        $data = WorkStatus::where('status', 'Active')->get();
+        $query = WorkStatus::query();
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $data = $query->orderBy('work_status_name')->get();
+
         return ApiResponse::success($data, 'Work status fetched');
     }
+
 
     public function apiStore(Request $request)
     {
         $request->validate([
+            'work_status_code' => 'required|max:20|unique:work_status_master,work_status_code',
             'work_status_name' => 'required|max:100',
             'status' => 'required'
         ]);
 
         $data = WorkStatus::create([
             'id' => Str::uuid(),
+            'work_status_code' => $request->work_status_code,
             'work_status_name' => $request->work_status_name,
-            'status' => $request->status,
-            'created_by' => 1
+            'description' => $request->description,
+            'status' => $request->status
         ]);
 
-        return ApiResponse::success($data, 'Work status created');
+        return ApiResponse::success($data, 'Work status created successfully');
     }
+
 
     public function apiUpdate(Request $request, $id)
     {
@@ -145,6 +176,28 @@ class WorkStatusController extends Controller
         $data->delete();
 
         return ApiResponse::success(null, 'Work status deleted');
+    }
+
+    public function apiDeleted()
+    {
+        $data = WorkStatus::onlyTrashed()->get();
+        return ApiResponse::success($data, 'Deleted work status fetched');
+    }
+
+    public function apiRestore($id)
+    {
+        $data = WorkStatus::withTrashed()->findOrFail($id);
+        $data->restore();
+
+        return ApiResponse::success($data, 'Work status restored');
+    }
+
+    public function apiForceDelete($id)
+    {
+        $data = WorkStatus::withTrashed()->findOrFail($id);
+        $data->forceDelete();
+
+        return ApiResponse::success(null, 'Work status permanently deleted');
     }
 
 }
