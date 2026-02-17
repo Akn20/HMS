@@ -53,22 +53,16 @@
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
 
-                                                <td>
-                                                    <span class="badge bg-soft-primary text-primary">
-                                                        {{ $designation->designation_code }}
-                                                    </span>
-                                                </td>
+                                                <td>{{ $designation->designation_code }}</td>
 
                                                 <td>{{ $designation->designation_name }}</td>
 
-                                                <td>
-                                                    {{ $designation->department->department_name ?? '-' }}
-                                                </td>
+                                                <td>{{ $designation->department->department_name ?? '-' }}</td>
 
                                                 <td>{{ $designation->description ?? '-' }}</td>
 
                                                 <td>
-                                                    @if($designation->status)
+                                                    @if($designation->status == 1)
                                                         <span class="badge bg-soft-success text-success">Active</span>
                                                     @else
                                                         <span class="badge bg-soft-danger text-danger">Inactive</span>
@@ -97,9 +91,9 @@
                                                     </div>
                                                 </td>
                                             </tr>
-
                                         @endforeach
                                     </tbody>
+
 
                                 </table>
 

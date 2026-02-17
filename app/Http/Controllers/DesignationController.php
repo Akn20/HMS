@@ -14,9 +14,13 @@ class DesignationController extends Controller
 {
     public function index()
     {
-        $designations = Designation::with('department')->latest()->get();
+        $designations = Designation::with('department')
+            ->orderBy('designation_name')
+            ->get();
+
         return view('masters.designation.index', compact('designations'));
     }
+
 
     public function create()
     {
@@ -116,9 +120,14 @@ class DesignationController extends Controller
 
     public function trash()
     {
-        $designations = Designation::onlyTrashed()->get();
+        $designations = Designation::onlyTrashed()
+            ->with('department')
+            ->orderBy('designation_name')
+            ->get();
+
         return view('masters.designation.trash', compact('designations'));
     }
+
 
     public function restore($id)
     {
@@ -138,14 +147,19 @@ class DesignationController extends Controller
 
     //API
 
-    public function apiIndex()
+    public function apiIndex(Request $request)
     {
-        $data = Designation::with('department')
-            ->where('status', 1)
-            ->get();
+        $query = Designation::with('department');
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $data = $query->orderBy('designation_name')->get();
 
         return ApiResponse::success($data, 'Designations fetched');
     }
+
 
     public function apiStore(Request $request)
     {
@@ -200,6 +214,28 @@ class DesignationController extends Controller
         $data->delete();
 
         return ApiResponse::success(null, 'Designation deleted');
+    }
+
+    public function apiDeleted()
+    {
+        $data = Designation::onlyTrashed()->get();
+        return ApiResponse::success($data, 'Deleted designations fetched');
+    }
+
+    public function apiRestore($id)
+    {
+        $data = Designation::withTrashed()->findOrFail($id);
+        $data->restore();
+
+        return ApiResponse::success($data, 'Designation restored');
+    }
+
+    public function apiForceDelete($id)
+    {
+        $data = Designation::withTrashed()->findOrFail($id);
+        $data->forceDelete();
+
+        return ApiResponse::success(null, 'Designation permanently deleted');
     }
 
 

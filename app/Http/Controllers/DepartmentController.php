@@ -133,11 +133,20 @@ class DepartmentController extends Controller
 
     //API
 
-    public function apiIndex()
+    public function apiIndex(Request $request)
     {
-        $data = Department::where('status', 1)->get();
+        $query = Department::query();
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $data = $query->orderBy('department_name')->get();
+
         return ApiResponse::success($data, 'Departments fetched');
     }
+
+
 
     public function apiStore(Request $request)
     {
@@ -182,6 +191,28 @@ class DepartmentController extends Controller
         $data->delete();
 
         return ApiResponse::success(null, 'Department deleted');
+    }
+
+    public function apiDeleted()
+    {
+        $data = Department::onlyTrashed()->get();
+        return ApiResponse::success($data, 'Deleted departments fetched');
+    }
+
+    public function apiRestore($id)
+    {
+        $data = Department::withTrashed()->findOrFail($id);
+        $data->restore();
+
+        return ApiResponse::success($data, 'Department restored');
+    }
+
+    public function apiForceDelete($id)
+    {
+        $data = Department::withTrashed()->findOrFail($id);
+        $data->forceDelete();
+
+        return ApiResponse::success(null, 'Department permanently deleted');
     }
 
 

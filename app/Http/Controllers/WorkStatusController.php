@@ -123,11 +123,19 @@ class WorkStatusController extends Controller
     }
 
     //API
-    public function apiIndex()
+    public function apiIndex(Request $request)
     {
-        $data = WorkStatus::where('status', 'Active')->get();
+        $query = WorkStatus::query();
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $data = $query->orderBy('work_status_name')->get();
+
         return ApiResponse::success($data, 'Work status fetched');
     }
+
 
     public function apiStore(Request $request)
     {
@@ -168,6 +176,28 @@ class WorkStatusController extends Controller
         $data->delete();
 
         return ApiResponse::success(null, 'Work status deleted');
+    }
+
+    public function apiDeleted()
+    {
+        $data = WorkStatus::onlyTrashed()->get();
+        return ApiResponse::success($data, 'Deleted work status fetched');
+    }
+
+    public function apiRestore($id)
+    {
+        $data = WorkStatus::withTrashed()->findOrFail($id);
+        $data->restore();
+
+        return ApiResponse::success($data, 'Work status restored');
+    }
+
+    public function apiForceDelete($id)
+    {
+        $data = WorkStatus::withTrashed()->findOrFail($id);
+        $data->forceDelete();
+
+        return ApiResponse::success(null, 'Work status permanently deleted');
     }
 
 }

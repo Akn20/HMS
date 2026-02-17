@@ -124,11 +124,19 @@ class JobTypeController extends Controller
 
     //API
 
-    public function apiIndex()
+    public function apiIndex(Request $request)
     {
-        $data = JobType::where('status', 'Active')->get();
+        $query = JobType::query();
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $data = $query->orderBy('job_type_name')->get();
+
         return ApiResponse::success($data, 'Job types fetched');
     }
+
 
     public function apiStore(Request $request)
     {
@@ -171,5 +179,28 @@ class JobTypeController extends Controller
 
         return ApiResponse::success(null, 'Job type deleted');
     }
+
+    public function apiDeleted()
+    {
+        $data = JobType::onlyTrashed()->get();
+        return ApiResponse::success($data, 'Deleted job types fetched');
+    }
+
+    public function apiRestore($id)
+    {
+        $data = JobType::withTrashed()->findOrFail($id);
+        $data->restore();
+
+        return ApiResponse::success($data, 'Job type restored');
+    }
+
+    public function apiForceDelete($id)
+    {
+        $data = JobType::withTrashed()->findOrFail($id);
+        $data->forceDelete();
+
+        return ApiResponse::success(null, 'Job type permanently deleted');
+    }
+
 
 }

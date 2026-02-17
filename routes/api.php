@@ -46,3 +46,33 @@ Route::get('/designations', [DesignationController::class, 'apiIndex']);
 Route::post('/designations', [DesignationController::class, 'apiStore']);
 Route::put('/designations/{id}', [DesignationController::class, 'apiUpdate']);
 Route::delete('/designations/{id}', [DesignationController::class, 'apiDelete']);
+
+// Religion
+Route::get('religions/deleted', [ReligionController::class, 'apiDeleted']);
+Route::put('religions/{id}/restore', [ReligionController::class, 'apiRestore']);
+Route::delete('religions/{id}/force-delete', [ReligionController::class, 'apiForceDelete']);
+
+// Designation
+Route::get('designations/deleted', [DesignationController::class, 'apiDeleted']);
+Route::put('designations/{id}/restore', [DesignationController::class, 'apiRestore']);
+Route::delete('designations/{id}/force-delete', [DesignationController::class, 'apiForceDelete']);
+
+// JobType
+Route::get('job-types/deleted', [JobTypeController::class, 'apiDeleted']);
+Route::put('job-types/{id}/restore', [JobTypeController::class, 'apiRestore']);
+Route::delete('job-types/{id}/force-delete', [JobTypeController::class, 'apiForceDelete']);
+
+// WorkStatus
+Route::get('work-status/deleted', [WorkStatusController::class, 'apiDeleted']);
+Route::put('work-status/{id}/restore', [WorkStatusController::class, 'apiRestore']);
+Route::delete('work-status/{id}/force-delete', [WorkStatusController::class, 'apiForceDelete']);
+
+// BloodGroup
+Route::get('blood-groups/deleted', [BloodGroupController::class, 'apiDeleted']);
+Route::put('blood-groups/{id}/restore', [BloodGroupController::class, 'apiRestore']);
+Route::delete('blood-groups/{id}/force-delete', [BloodGroupController::class, 'apiForceDelete']);
+
+// Department
+Route::get('departments/deleted', [DepartmentController::class, 'apiDeleted']);
+Route::put('departments/{id}/restore', [DepartmentController::class, 'apiRestore']);
+Route::delete('departments/{id}/force-delete', [DepartmentController::class, 'apiForceDelete']);
