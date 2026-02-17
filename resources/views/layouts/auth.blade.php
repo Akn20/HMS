@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="zxx">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('title')</title>
+    <title>@yield('page-title', 'Login | ' . config('app.name'))</title>
+
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
@@ -22,16 +24,17 @@
 
 <body>
 
-@yield('content')
+    @yield('content')
 
-<!-- Vendors JS -->
-<script src="{{ asset('assets/vendors/js/vendors.min.js') }}"></script>
+    <!-- Vendors JS -->
+    <script src="{{ asset('assets/vendors/js/vendors.min.js') }}"></script>
 
-<!-- App Init -->
-<script src="{{ asset('assets/js/common-init.min.js') }}"></script>
+    <!-- App Init -->
+    <script src="{{ asset('assets/js/common-init.min.js') }}"></script>
 
-<!-- Theme Customizer -->
-<script src="{{ asset('assets/js/theme-customizer-init.min.js') }}"></script>
+    <!-- Theme Customizer -->
+    <script src="{{ asset('assets/js/theme-customizer-init.min.js') }}"></script>
 
 </body>
+
 </html>

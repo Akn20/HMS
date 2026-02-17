@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FinancialYear extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'code',
@@ -22,6 +23,10 @@ class FinancialYear extends Model
         'is_active' => 'boolean',
     ];
 
+    protected $dates = [
+        'deleted_at',
+    ];
+
     public function scopeForDate($query, $date)
     {
         return $query->where('start_date', '<=', $date)
@@ -34,5 +39,4 @@ class FinancialYear extends Model
             ->withPivot(['is_current', 'locked'])
             ->withTimestamps();
     }
-
 }
