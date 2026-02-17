@@ -165,6 +165,8 @@
                     </div>
                     <!-- [Conversion Rate] end -->
                     <!-- [Payment Records] start -->
+                  
+
                     <div class="col-xxl-8">
                         <div class="card stretch stretch-full">
                             <div class="card-header">
@@ -181,67 +183,12 @@
                                             <a href="javascript:void(0);" class="avatar-text avatar-xs bg-success" data-bs-toggle="expand"> </a>
                                         </div>
                                     </div>
-                                    <div class="dropdown">
-                                        <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown" data-bs-offset="25, 25">
-                                            <div data-bs-toggle="tooltip" title="Options">
-                                                <i class="feather-more-vertical"></i>
-                                            </div>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="feather-at-sign"></i>New</a>
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="feather-calendar"></i>Event</a>
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="feather-bell"></i>Snoozed</a>
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="feather-trash-2"></i>Deleted</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="feather-settings"></i>Settings</a>
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="feather-life-buoy"></i>Tips & Tricks</a>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                             <div class="card-body custom-card-action p-0">
                                 <div id="payment-records-chart"></div>
-                            </div>
-                            <div class="card-footer">
-                                <div class="row g-4">
-                                    <div class="col-lg-3">
-                                        <div class="p-3 border border-dashed rounded">
-                                            <div class="fs-12 text-muted mb-1">Awaiting</div>
-                                            <h6 class="fw-bold text-dark">$5,486</h6>
-                                            <div class="progress mt-2 ht-3">
-                                                <div class="progress-bar bg-primary" role="progressbar" style="width: 81%"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="p-3 border border-dashed rounded">
-                                            <div class="fs-12 text-muted mb-1">Completed</div>
-                                            <h6 class="fw-bold text-dark">$9,275</h6>
-                                            <div class="progress mt-2 ht-3">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width: 82%"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="p-3 border border-dashed rounded">
-                                            <div class="fs-12 text-muted mb-1">Rejected</div>
-                                            <h6 class="fw-bold text-dark">$3,868</h6>
-                                            <div class="progress mt-2 ht-3">
-                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 68%"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="p-3 border border-dashed rounded">
-                                            <div class="fs-12 text-muted mb-1">Revenue</div>
-                                            <h6 class="fw-bold text-dark">$50,668</h6>
-                                            <div class="progress mt-2 ht-3">
-                                                <div class="progress-bar bg-dark" role="progressbar" style="width: 75%"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div>  
                         </div>
                     </div>
                     <!-- [Payment Records] end -->
@@ -1059,31 +1006,97 @@
 @endsection
 
 @section('scripts')
+@if(isset($orgData) && isset($hospitalData))
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    var orgData = @json($orgData);
+    var hospitalData = @json($hospitalData);
+
+    var months = [];
+    var orgCounts = [];
+    var hospitalCounts = [];
+
+    var allMonths = new Set();
+
+    // collect months from both datasets
+    orgData.forEach(item => allMonths.add(item.month));
+    hospitalData.forEach(item => allMonths.add(item.month));
+
+    allMonths = Array.from(allMonths).sort();
+
+    allMonths.forEach(function(month) {
+
+        months.push(month);
+
+        var org = orgData.find(o => o.month === month);
+        var hosp = hospitalData.find(h => h.month === month);
+
+        orgCounts.push(org ? org.count : 0);
+        hospitalCounts.push(hosp ? hosp.count : 0);
+    });
+
     var options = {
         chart: {
-            type: 'area',
-            height: 380
+            height: 380,
+            type: 'bar',
+            stacked: false,
+            toolbar: { show: false }
         },
+        plotOptions: {
+            bar: {
+                columnWidth: '35%',
+                borderRadius: 4
+            }
+        },
+        colors: ['#3454d1', '#E1E3EA'],
         series: [
             {
                 name: 'Organizations',
-                data: @json($orgData->pluck('count'))
+                data: orgCounts
             },
             {
                 name: 'Hospitals',
-                data: @json($hospitalData->pluck('count'))
+                data: hospitalCounts
             }
         ],
         xaxis: {
-            categories: @json($orgData->pluck('month'))
+            categories: months,
+            axisBorder: { show: false },
+            axisTicks: { show: false },
+            labels: {
+                style: {
+                    fontSize: "12px",
+                    colors: "#A0ACBB"
+                }
+            }
         },
-        stroke: {
-            curve: 'smooth'
+       
+        yaxis: {
+            min: 0,
+            max: Math.max(...orgCounts, ...hospitalCounts), 
+            forceNiceScale: true, decimalsInFloat: 0,
+            labels: { formatter: function (val) { 
+                return Number.isInteger(val) ? val : '';
+             } 
+            }
+        },
+
+        grid: {
+            borderColor: "#E1E3EA",
+            strokeDashArray: 4
+        },
+        dataLabels: {
+            enabled: false
+        },
+        legend: {
+            position: 'bottom'
         }
     };
 
-    var chart = new ApexCharts(document.querySelector("#payment-records-chart"), options);
-    chart.render();
+    new ApexCharts(document.querySelector("#payment-records-chart"), options).render();
+
+});
 </script>
+@endif
 @endsection

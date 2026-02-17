@@ -16,20 +16,21 @@ class DashboardController extends Controller
         $InstitutionCount = Institution::count();
 
          $orgData = Organization::select(
-            DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
-            DB::raw("COUNT(*) as count")
-        )
-        ->groupBy('month')
-        ->orderBy('month')
-        ->get();
+                DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
+                DB::raw("COUNT(*) as count")
+            )
+            ->groupBy(DB::raw("DATE_FORMAT(created_at, '%Y-%m')"))
+            ->orderBy('month')
+            ->get();
 
-    $hospitalData = Institution::select(
-            DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
-            DB::raw("COUNT(*) as count")
-        )
-        ->groupBy('month')
-        ->orderBy('month')
-        ->get();
+
+        $hospitalData = Institution::select(
+                DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
+                DB::raw("COUNT(*) as count")
+            )
+            ->groupBy(DB::raw("DATE_FORMAT(created_at, '%Y-%m')"))
+            ->orderBy('month')
+            ->get();
 
         return view('dashboard', compact('organizationCount','InstitutionCount','orgData', 'hospitalData'));
     }

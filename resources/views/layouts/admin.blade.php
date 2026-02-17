@@ -84,6 +84,7 @@
 
     <!--! BEGIN: Vendors JS !-->
     @include('partials.scripts')
+    @yield('scripts')
     <!--! END: Theme Customizer !-->
 
 
