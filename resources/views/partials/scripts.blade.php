@@ -6,6 +6,12 @@
 <!--! END: Vendors JS !-->
 <!--! BEGIN: Apps Init  !-->
 <script src="assets/js/common-init.min.js"></script>
+
+<script>
+    var hospitalMonths = @json($hospitalMonths ?? []);
+    var hospitalCounts = @json($hospitalCounts ?? []);
+</script>
+
 <script src="assets/js/dashboard-init.min.js"></script>
 <!--! END: Apps Init !-->
 <!--! BEGIN: Theme Customizer  !-->

@@ -68,16 +68,27 @@ class DashboardController extends Controller
             ->get();
 
 
-        //
-        
-$roleWiseUsers = User::select(
-        'roles.name as role_name',
-        DB::raw('COUNT(users.id) as total')
-    )
-    ->join('roles', 'users.role_id', '=', 'roles.id')
-    ->groupBy('roles.name')
-    ->get();
+        $hospitalMonths = [];
+        $hospitalCounts = [];
 
+        foreach ($hospitalData as $data) {
+            $hospitalMonths[] = \Carbon\Carbon::createFromFormat('Y-m', $data->month)->format('M Y');
+            $hospitalCounts[] = $data->count;
+        }
+
+        //donut chart data for user roles
+         
+        $roleWiseUsers = User::select(
+                'roles.name as role_name',
+                DB::raw('COUNT(users.id) as total')
+            )
+            ->join('roles', 'users.role_id', '=', 'roles.id')
+            ->groupBy('roles.name')
+            ->get();
+
+
+        //Hospital growth data 
+      
 
         return view('dashboard', compact
         ('organizationCount',
@@ -95,6 +106,10 @@ $roleWiseUsers = User::select(
         'activeModules',
         'inactiveModules',
         'activeModulePercent',
-        'roleWiseUsers'));
+        'roleWiseUsers',
+        'hospitalMonths',
+        'hospitalCounts'
+
+        ));
     }
 }
