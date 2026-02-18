@@ -16,154 +16,203 @@
                     <!-- [Organization] start -->
                     <div class="col-xxl-3 col-md-6">
                         <div class="card stretch stretch-full">
-                           <div class="card-body">
-                                <div class="d-flex align-items-start justify-content-between mb-4">
+                            <div class="card-body">
 
-                                    <!-- LEFT SIDE -->
-                                    <div>
-
-                                        <!-- icon + text in one row -->
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="avatar-text avatar-lg bg-gray-200">
-                                                <i class="feather-home"></i>
-                                            </div>
-
-                                            <h3 class="fs-13 fw-semibold mb-0">
-                                                Organizations
-                                            </h3>
-                                        </div>
-
-                                        <!-- count below -->
-                                        <div class="text-center mb">
-                                            <div class="fs-3 fw-bold text-dark">
-                                                <span class="counter">{{ $organizationCount }}</span>
-                                            </div>
-                                        </div>
-
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <div class="avatar-text avatar-lg bg-gray-200">
+                                        <i class="feather-home"></i>
                                     </div>
+
+                                    <h3 class="fs-13 fw-semibold mb-0">
+                                        Organizations
+                                    </h3>
                                 </div>
 
-                                    <div class="text-center">
-                                        <span class="fs-6 fw-bold text-muted">Total Organizations</span>
-                                         <div class="progress mt-2 ht-3">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 100%"></div>
+                                <!-- Total Count Center -->
+                                <div class="text-center mb-3">
+                                    <div class="fs-3 fw-bold text-dark">
+                                        <span class="counter">{{ $organizationCount }}</span>
                                     </div>
+                                    
+                                </div>
+
+                                <!-- Active / Inactive Text -->
+                                <div class="d-flex justify-content-between fs-12 mb-1">
+                                    <span class="text-success">
+                                        Active: {{ $activeOrganizations }}
+                                    </span>
+
+                                    <span class="text-danger">
+                                        Inactive: {{ $inactiveOrganizations }}
+                                    </span>
+                                </div>
+
+                                <!-- Single Progress Bar -->
+                                <div class="progress mt-2 ht-3">
+                                    <div class="progress-bar bg-success"
+                                        role="progressbar"
+                                        style="width: {{ $activeOrganizationPercentage }}%">
                                     </div>
 
+                                    <div class="progress-bar bg-danger"
+                                        role="progressbar"
+                                        style="width: {{ 100 - $activeOrganizationPercentage }}%">
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
                     </div>
-                    <!-- [Institutions] end -->
+
+                    <!-- [Organization] end -->
+
+                    <!-- [Hospitals] start -->
                     <div class="col-xxl-3 col-md-6">
                         <div class="card stretch stretch-full">
                             <div class="card-body">
-                                <div class="d-flex align-items-start justify-content-between mb-4">
 
-                                    <!-- LEFT SIDE -->
-                                    <div>
+                                <!-- ICON + TEXT -->
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <div class="avatar-text avatar-lg bg-gray-200">
+                                        <i class="feather-plus-square"></i>
+                                    </div>
 
-                                        <!-- icon + text in one row -->
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="avatar-text avatar-lg bg-gray-200">
-                                                <i class="feather-plus-square"></i>
-                                            </div>
+                                    <h3 class="fs-13 fw-semibold mb-0">
+                                        Hospitals
+                                    </h3>
+                                </div>
 
-                                            <h3 class="fs-13 fw-semibold mb-0">
-                                                Hospitals
-                                            </h3>
-                                        </div>
-
-                                        <!-- count below -->
-                                        <div class="text-center mb">
-                                            <div class="fs-3 fw-bold text-dark">
-                                                <span class="counter">{{ $institutionCount }}</span>
-                                            </div>
-                                        </div>
-
+                                <!-- TOTAL COUNT CENTER -->
+                                <div class="text-center mb-2">
+                                    <div class="fs-3 fw-bold text-dark">
+                                        <span class="counter">{{ $InstitutionCount }}</span>
                                     </div>
                                 </div>
 
-                                    <div class="text-center">
-                                        <span class="fs-6 fw-bold text-muted">Total Hospitals</span>
-                                         <div class="progress mt-2 ht-3">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 100%"></div>
-                                    </div>
+                                <!-- ACTIVE / INACTIVE PROGRESS -->
+                                <div class="pt-2">
+                                    <div class="d-flex justify-content-between fs-12 mb-1">
+                                        <span class="text-success">
+                                            Active: {{ $activeHospitals }}
+                                        </span>
+                                        <span class="text-danger">
+                                            Inactive: {{ $inactiveHospitals }}
+                                        </span>
                                     </div>
 
-
-                            </div>
-                        </div>
-                    </div>
-                    <!-- [Converted Leads] end -->
-                    <!-- [Projects In Progress] start -->
-                    <div class="col-xxl-3 col-md-6">
-                        <div class="card stretch stretch-full">
-                            <div class="card-body">
-                                <div class="d-flex align-items-start justify-content-between mb-4">
-                                    <div class="d-flex gap-4 align-items-center">
-                                        <div class="avatar-text avatar-lg bg-gray-200">
-                                            <i class="feather-briefcase"></i>
-                                        </div>
-                                        <div>
-                                            <div class="fs-4 fw-bold text-dark"><span class="counter">16</span>/<span class="counter">20</span></div>
-                                            <h3 class="fs-13 fw-semibold text-truncate-1-line">Projects In Progress</h3>
-                                        </div>
-                                    </div>
-                                    <a href="javascript:void(0);" class="">
-                                        <i class="feather-more-vertical"></i>
-                                    </a>
-                                </div>
-                                <div class="pt-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <a href="javascript:void(0);" class="fs-12 fw-medium text-muted text-truncate-1-line">Projects In Progress </a>
-                                        <div class="w-100 text-end">
-                                            <span class="fs-12 text-dark">16 Completed</span>
-                                            <span class="fs-11 text-muted">(78%)</span>
-                                        </div>
-                                    </div>
                                     <div class="progress mt-2 ht-3">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 78%"></div>
+                                        <div class="progress-bar bg-success"
+                                            style="width: {{ $activeHospitalPercentage }}%">
+                                        </div>
+                                        <div class="progress-bar bg-danger"
+                                            style="width: {{ 100 - $activeHospitalPercentage }}%">
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
-                    <!-- [Projects In Progress] end -->
-                    <!-- [Conversion Rate] start -->
+
+                    <!-- [Hospitals] end -->
+
+                    
+                    <!-- [Users] start -->
+                 <div class="col-xxl-3 col-md-6">
+                    <div class="card stretch stretch-full">
+                        <div class="card-body d-flex flex-column">
+
+                            <!-- Icon -->
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="avatar-text avatar-lg bg-gray-200">
+                                    <i class="feather-users"></i>
+                                </div>
+
+                                <h3 class="fs-13 fw-semibold mb-0">
+                                    Users
+                                </h3>
+                            </div>
+
+                            <!-- COUNT CENTERED -->
+                            <h2 class="fw-bold mb-3 text-center">
+                                {{ $userCount }}
+                            </h2>
+
+                            <!-- Active / Inactive -->
+                            <div class="w-100 mt-2">
+                                <div class="d-flex justify-content-between fs-12 mb-1">
+                                    <span class="text-success">
+                                        Active: {{ $activeUsers }}
+                                    </span>
+                                    <span class="text-danger">
+                                        Inactive: {{ $inactiveUsers }}
+                                    </span>
+                                </div>
+
+                                <div class="progress mt-2 ht-3">
+                                    <div class="progress-bar bg-success"
+                                        style="width: {{ $activePercentage }}%">
+                                    </div>
+                                    <div class="progress-bar bg-danger"
+                                        style="width: {{ 100 - $activePercentage }}%">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                    <!-- [Users] end -->
+
+                  
+                    <!-- [Modules] start -->
                     <div class="col-xxl-3 col-md-6">
                         <div class="card stretch stretch-full">
                             <div class="card-body">
-                                <div class="d-flex align-items-start justify-content-between mb-4">
-                                    <div class="d-flex gap-4 align-items-center">
-                                        <div class="avatar-text avatar-lg bg-gray-200">
-                                            <i class="feather-activity"></i>
-                                        </div>
-                                        <div>
-                                            <div class="fs-4 fw-bold text-dark"><span class="counter">46.59</span>%</div>
-                                            <h3 class="fs-13 fw-semibold text-truncate-1-line">Conversion Rate</h3>
-                                        </div>
+
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <div class="avatar-text avatar-lg bg-gray-200">
+                                        <i class="feather-grid"></i>
                                     </div>
-                                    <a href="javascript:void(0);" class="">
-                                        <i class="feather-more-vertical"></i>
-                                    </a>
+
+                                    <h3 class="fs-13 fw-semibold mb-0">
+                                        Modules
+                                    </h3>
                                 </div>
-                                <div class="pt-4">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <a href="javascript:void(0);" class="fs-12 fw-medium text-muted text-truncate-1-line"> Conversion Rate </a>
-                                        <div class="w-100 text-end">
-                                            <span class="fs-12 text-dark">$2,254</span>
-                                            <span class="fs-11 text-muted">(46%)</span>
-                                        </div>
-                                    </div>
-                                    <div class="progress mt-2 ht-3">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 46%"></div>
+
+                                <div class="text-center mb-2">
+                                    <div class="fs-3 fw-bold text-dark">
+                                        {{ $moduleCount }}
                                     </div>
                                 </div>
+
+                                <div class="d-flex justify-content-between fs-12 mb-1">
+                                    <span class="text-success">
+                                        Active: {{ $activeModules }}
+                                    </span>
+
+                                    <span class="text-danger">
+                                        Inactive: {{ $inactiveModules }}
+                                    </span>
+                                </div>
+
+                                <div class="progress mt-2 ht-3">
+                                    <div class="progress-bar bg-success"
+                                        style="width: {{ $activeModulePercent }}%">
+                                    </div>
+
+                                    <div class="progress-bar bg-danger"
+                                        style="width: {{ 100 - $activeModulePercent }}%">
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
-                    <!-- [Conversion Rate] end -->
+
+                    <!-- [Modules] end -->
                     <!-- [Payment Records] start -->
                   
 
@@ -330,102 +379,22 @@
                     </div>
                     <!-- [Mini] end !-->
                     <!-- [Leads Overview] start -->
-                    <div class="col-xxl-4">
-                        <div class="card stretch stretch-full">
-                            <div class="card-header">
-                                <h5 class="card-title">Leads Overview</h5>
-                                <div class="card-header-action">
-                                    <div class="card-header-btn">
-                                        <div data-bs-toggle="tooltip" title="Delete">
-                                            <a href="javascript:void(0);" class="avatar-text avatar-xs bg-danger" data-bs-toggle="remove"> </a>
-                                        </div>
-                                        <div data-bs-toggle="tooltip" title="Refresh">
-                                            <a href="javascript:void(0);" class="avatar-text avatar-xs bg-warning" data-bs-toggle="refresh"> </a>
-                                        </div>
-                                        <div data-bs-toggle="tooltip" title="Maximize/Minimize">
-                                            <a href="javascript:void(0);" class="avatar-text avatar-xs bg-success" data-bs-toggle="expand"> </a>
-                                        </div>
-                                    </div>
-                                    <div class="dropdown">
-                                        <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown" data-bs-offset="25, 25">
-                                            <div data-bs-toggle="tooltip" title="Options">
-                                                <i class="feather-more-vertical"></i>
-                                            </div>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="feather-at-sign"></i>New</a>
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="feather-calendar"></i>Event</a>
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="feather-bell"></i>Snoozed</a>
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="feather-trash-2"></i>Deleted</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="feather-settings"></i>Settings</a>
-                                            <a href="javascript:void(0);" class="dropdown-item"><i class="feather-life-buoy"></i>Tips & Tricks</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body custom-card-action">
-                                <div id="leads-overview-donut"></div>
-                                <div class="row g-2">
-                                    <div class="col-4">
-                                        <a href="javascript:void(0);" class="p-2 hstack gap-2 rounded border border-dashed border-gray-5">
-                                            <span class="wd-7 ht-7 rounded-circle d-inline-block" style="background-color: #3454d1"></span>
-                                            <span>New<span class="fs-10 text-muted ms-1">(20K)</span></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-4">
-                                        <a href="javascript:void(0);" class="p-2 hstack gap-2 rounded border border-dashed border-gray-5">
-                                            <span class="wd-7 ht-7 rounded-circle d-inline-block" style="background-color: #0d519e"></span>
-                                            <span>Contacted<span class="fs-10 text-muted ms-1">(15K)</span></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-4">
-                                        <a href="javascript:void(0);" class="p-2 hstack gap-2 rounded border border-dashed border-gray-5">
-                                            <span class="wd-7 ht-7 rounded-circle d-inline-block" style="background-color: #1976d2"></span>
-                                            <span>Qualified<span class="fs-10 text-muted ms-1">(10K)</span></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-4">
-                                        <a href="javascript:void(0);" class="p-2 hstack gap-2 rounded border border-dashed border-gray-5">
-                                            <span class="wd-7 ht-7 rounded-circle d-inline-block" style="background-color: #1e88e5"></span>
-                                            <span>Working<span class="fs-10 text-muted ms-1">(18K)</span></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-4">
-                                        <a href="javascript:void(0);" class="p-2 hstack gap-2 rounded border border-dashed border-gray-5">
-                                            <span class="wd-7 ht-7 rounded-circle d-inline-block" style="background-color: #2196f3"></span>
-                                            <span>Customer<span class="fs-10 text-muted ms-1">(10K)</span></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-4">
-                                        <a href="javascript:void(0);" class="p-2 hstack gap-2 rounded border border-dashed border-gray-5">
-                                            <span class="wd-7 ht-7 rounded-circle d-inline-block" style="background-color: #42a5f5"></span>
-                                            <span>Proposal<span class="fs-10 text-muted ms-1">(15K)</span></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-4">
-                                        <a href="javascript:void(0);" class="p-2 hstack gap-2 rounded border border-dashed border-gray-5">
-                                            <span class="wd-7 ht-7 rounded-circle d-inline-block" style="background-color: #64b5f6"></span>
-                                            <span>Leads<span class="fs-10 text-muted ms-1">(16K)</span></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-4">
-                                        <a href="javascript:void(0);" class="p-2 hstack gap-2 rounded border border-dashed border-gray-5">
-                                            <span class="wd-7 ht-7 rounded-circle d-inline-block" style="background-color: #90caf9"></span>
-                                            <span>Progress<span class="fs-10 text-muted ms-1">(14K)</span></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-4">
-                                        <a href="javascript:void(0);" class="p-2 hstack gap-2 rounded border border-dashed border-gray-5">
-                                            <span class="wd-7 ht-7 rounded-circle d-inline-block" style="background-color: #aad6fa"></span>
-                                            <span>Others<span class="fs-10 text-muted ms-1">(10K)</span></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
+<div class="col-xxl-4">
+
+    <div class="card stretch stretch-full">
+        <div class="card-header">
+            <h5 class="card-title">Role-wise User Distribution</h5>
+        </div>
+        <div class="card-body">
+            <div id="role-wise-donut"></div>
+        </div>
+    </div>
+</div>
+
                     <!-- [Leads Overview] end -->
+                    
+
                     <!-- [Latest Leads] start -->
                     <div class="col-xxl-8">
                         <div class="card stretch stretch-full">
@@ -1100,3 +1069,32 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 @endif
 @endsection
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    var roleData = @json($roleWiseUsers);
+
+    var roles = roleData.map(r => r.role_name);
+    var counts = roleData.map(r => r.total);
+
+    var options = {
+        chart: {
+            type: 'donut',
+            height: 320
+        },
+        series: counts,
+        labels: roles,
+        colors: ['#3454d1', '#25b865', '#f4b400', '#d13b4c', '#6c757d'],
+        legend: {
+            position: 'bottom'
+        },
+        dataLabels: {
+            enabled: true
+        }
+    };
+
+    new ApexCharts(document.querySelector("#role-wise-donut"), options).render();
+
+});
+</script>
