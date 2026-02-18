@@ -9,6 +9,7 @@
 <script src="assets/js/dashboard-init.min.js"></script>
 <!--! END: Apps Init !-->
 <!--! BEGIN: Theme Customizer  !-->
+<<<<<<< HEAD
 <script src="assets/js/theme-customizer-init.min.js"></script>
 <!-- Select2 CSS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -24,3 +25,6 @@
 </script>
 
 
+=======
+<script src="assets/js/theme-customizer-init.min.js"></script>
+>>>>>>> origin/main

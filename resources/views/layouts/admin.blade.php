@@ -2,6 +2,7 @@
 <html lang="zxx">
 
 <head>
+<<<<<<< HEAD
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     @include('partials.head')
     <style>
@@ -64,6 +65,27 @@
     </style>
 
 
+=======
+    @include('partials.head')
+
+    <style>
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-control,
+        .form-select,
+        textarea {
+            font-size: 14px !important;
+        }
+
+        textarea.form-control {
+            height: auto;
+        }
+    </style>
+
+>>>>>>> origin/main
 </head>
 
 <body>
@@ -72,6 +94,7 @@
 
     @include('partials.navbar')
 
+<<<<<<< HEAD
     <main class="nxl-container px-4">
         <div class="nxl-content">
             @yield('content')
@@ -88,6 +111,37 @@
     <!--! END: Theme Customizer !-->
 
 
+=======
+    <main class="nxl-container">
+        <div class="nxl-content px-4">
+            {{-- SUCCESS MESSAGE --}}
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            {{-- ERROR MESSAGE --}}
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            @yield('content')
+        </div>
+
+        <!-- [ Footer ] start -->
+        @include('partials.footer')
+        <!-- [ Footer ] end -->
+    </main>
+    <!-- hello -->
+    <!--! BEGIN: Vendors JS !-->
+    @include('partials.scripts')
+    <!--! END: Theme Customizer !-->
+>>>>>>> origin/main
 </body>
 
 </html>

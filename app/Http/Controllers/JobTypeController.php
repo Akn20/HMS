@@ -24,6 +24,7 @@ class JobTypeController extends Controller
 
     public function store(Request $request)
     {
+<<<<<<< HEAD
 $request->validate([
     'job_type_code' => 'required|max:50|unique:job_type_master',
     'job_type_name' => 'required|max:100',
@@ -37,6 +38,31 @@ JobType::create([
     'status'        => $request->status,
     'created_by'    => 1
 ]);
+=======
+        $request->validate(
+            [
+                'job_type_code' => 'required|max:50|unique:job_type_master,job_type_code',
+                'job_type_name' => 'required|max:100|unique:job_type_master,job_type_name',
+                'status' => 'required'
+            ],
+            [
+                'job_type_code.required' => 'Job type code is required.',
+                'job_type_code.unique' => 'Job type code already exists.',
+                'job_type_name.required' => 'Job type name is required.',
+                'job_type_name.unique' => 'Job type already exists.',
+                'status.required' => 'Please select status.'
+            ]
+        );
+
+
+        JobType::create([
+            'job_type_code' => $request->job_type_code,
+            'job_type_name' => $request->job_type_name,
+            'description' => $request->description,
+            'status' => $request->status,
+            'created_by' => 1
+        ]);
+>>>>>>> origin/main
 
 
         return redirect()->route('job-type.index')
@@ -51,6 +77,7 @@ JobType::create([
 
     public function update(Request $request, $id)
     {
+<<<<<<< HEAD
 $request->validate([
     'job_type_code' => "required|max:50|unique:job_type_master,job_type_code,$id",
     'job_type_name' => 'required|max:100',
@@ -66,10 +93,43 @@ $jobType->update([
 ]);
 
 
+=======
+        $jobType = JobType::findOrFail($id);
+
+        $request->validate(
+            [
+                'job_type_code' => "required|max:50|unique:job_type_master,job_type_code,$id",
+                'job_type_name' => "required|max:100|unique:job_type_master,job_type_name,$id",
+                'status' => 'required'
+            ],
+            [
+                'job_type_code.required' => 'Job type code is required.',
+                'job_type_code.unique' => 'Job type code already exists.',
+                'job_type_name.required' => 'Job type name is required.',
+                'job_type_name.unique' => 'Job type already exists.',
+                'status.required' => 'Please select status.'
+            ]
+        );
+
+
+        $jobType->update([
+            'job_type_code' => $request->job_type_code,
+            'job_type_name' => $request->job_type_name,
+            'description' => $request->description,
+            'status' => $request->status,
+            'updated_by' => 1
+        ]);
+
+>>>>>>> origin/main
         return redirect()->route('job-type.index')
             ->with('success', 'Job Type updated successfully');
     }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> origin/main
     public function destroy($id)
     {
         $jobType = JobType::findOrFail($id);
@@ -101,6 +161,7 @@ $jobType->update([
 
     //API
 
+<<<<<<< HEAD
     public function apiIndex()
     {
         $data = JobType::where('status', 'Active')->get();
@@ -110,20 +171,53 @@ $jobType->update([
     public function apiStore(Request $request)
     {
         $request->validate([
+=======
+    public function apiIndex(Request $request)
+    {
+        $query = JobType::query();
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $data = $query->orderBy('job_type_name')->get();
+
+        return ApiResponse::success($data, 'Job types fetched');
+    }
+
+
+    public function apiStore(Request $request)
+    {
+        $request->validate([
+            'job_type_code' => 'required|max:20|unique:job_type_master,job_type_code',
+>>>>>>> origin/main
             'job_type_name' => 'required|max:100',
             'status' => 'required'
         ]);
 
         $data = JobType::create([
             'id' => Str::uuid(),
+<<<<<<< HEAD
             'job_type_name' => $request->job_type_name,
+=======
+            'job_type_code' => $request->job_type_code,
+            'job_type_name' => $request->job_type_name,
+            'description' => $request->description,
+>>>>>>> origin/main
             'status' => $request->status,
             'created_by' => 1
         ]);
 
+<<<<<<< HEAD
         return ApiResponse::success($data, 'Job type created');
     }
 
+=======
+        return ApiResponse::success($data, 'Job type created successfully');
+    }
+
+
+>>>>>>> origin/main
     public function apiUpdate(Request $request, $id)
     {
         $data = JobType::findOrFail($id);
@@ -145,4 +239,30 @@ $jobType->update([
         return ApiResponse::success(null, 'Job type deleted');
     }
 
+<<<<<<< HEAD
+=======
+    public function apiDeleted()
+    {
+        $data = JobType::onlyTrashed()->get();
+        return ApiResponse::success($data, 'Deleted job types fetched');
+    }
+
+    public function apiRestore($id)
+    {
+        $data = JobType::withTrashed()->findOrFail($id);
+        $data->restore();
+
+        return ApiResponse::success($data, 'Job type restored');
+    }
+
+    public function apiForceDelete($id)
+    {
+        $data = JobType::withTrashed()->findOrFail($id);
+        $data->forceDelete();
+
+        return ApiResponse::success(null, 'Job type permanently deleted');
+    }
+
+
+>>>>>>> origin/main
 }

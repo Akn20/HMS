@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+<<<<<<< HEAD
 use App\Models\Module;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -47,11 +48,43 @@ class ModuleController extends Controller
             'type' => 'required|in:Web,App,Both',
             'access_for' => 'required|in:institution,service'
 
+=======
+
+use Illuminate\Http\Request;
+use App\Models\Module;
+
+class ModuleController extends Controller
+{
+    public function index()
+    {
+        $modules = Module::latest()->get();
+        return view('modules.index', compact('modules'));
+    }
+
+    public function create()
+    {
+        $modules = Module::all(); // for parent module dropdown
+        return view('modules.create', compact('modules'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'module_label' => 'required',
+            'module_display_name' => 'required',
+            'priority' => 'required|numeric',
+            'icon' => 'required',
+            'file_url' => 'required',
+            'page_name' => 'required',
+            'type' => 'required',
+            'access_for' => 'required',
+>>>>>>> origin/main
         ]);
 
         Module::create($request->all());
 
         return redirect()->route('modules.index')
+<<<<<<< HEAD
             ->with('success', 'Module created successfully!');
     }
 
@@ -226,3 +259,8 @@ class ModuleController extends Controller
         ]);
     }
 }
+=======
+                         ->with('success', 'Module Created Successfully');
+    }
+}
+>>>>>>> origin/main

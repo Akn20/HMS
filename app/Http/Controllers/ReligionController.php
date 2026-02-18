@@ -24,10 +24,25 @@ class ReligionController extends Controller
 
     public function store(Request $request)
     {
+<<<<<<< HEAD
         $request->validate([
             'religion_name' => 'required|max:100|unique:religion_master',
             'status' => 'required'
         ]);
+=======
+        $request->validate(
+            [
+                'religion_name' => 'required|max:100|unique:religion_master,religion_name',
+                'status' => 'required'
+            ],
+            [
+                'religion_name.required' => 'Religion name is required.',
+                'religion_name.unique' => 'This religion already exists.',
+                'status.required' => 'Please select status.'
+            ]
+        );
+
+>>>>>>> origin/main
 
         Religion::create([
             'religion_name' => $request->religion_name,
@@ -47,10 +62,25 @@ class ReligionController extends Controller
 
     public function update(Request $request, $id)
     {
+<<<<<<< HEAD
         $request->validate([
             'religion_name' => "required|max:100|unique:religion_master,religion_name,$id",
             'status' => 'required'
         ]);
+=======
+        $request->validate(
+            [
+                'religion_name' => "required|max:100|unique:religion_master,religion_name,$id",
+                'status' => 'required'
+            ],
+            [
+                'religion_name.required' => 'Religion name is required.',
+                'religion_name.unique' => 'This religion already exists.',
+                'status.required' => 'Please select status.'
+            ]
+        );
+
+>>>>>>> origin/main
 
         $religion = Religion::findOrFail($id);
 
@@ -94,12 +124,29 @@ class ReligionController extends Controller
 
     //API
 
+<<<<<<< HEAD
     public function apiIndex()
     {
         $data = Religion::where('status', 'Active')->get();
         return ApiResponse::success($data, 'Religion list fetched');
     }
 
+=======
+    public function apiIndex(Request $request)
+    {
+        $query = Religion::query();
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $data = $query->orderBy('religion_name')->get();
+
+        return ApiResponse::success($data, 'Religion list fetched');
+    }
+
+
+>>>>>>> origin/main
     public function apiStore(Request $request)
     {
         $request->validate([
@@ -137,6 +184,30 @@ class ReligionController extends Controller
 
         return ApiResponse::success(null, 'Religion deleted');
     }
+<<<<<<< HEAD
+=======
+    public function apiDeleted()
+    {
+        $data = Religion::onlyTrashed()->get();
+        return ApiResponse::success($data, 'Deleted religions fetched');
+    }
+
+    public function apiRestore($id)
+    {
+        $data = Religion::withTrashed()->findOrFail($id);
+        $data->restore();
+
+        return ApiResponse::success($data, 'Religion restored');
+    }
+
+    public function apiForceDelete($id)
+    {
+        $data = Religion::withTrashed()->findOrFail($id);
+        $data->forceDelete();
+
+        return ApiResponse::success(null, 'Religion permanently deleted');
+    }
+>>>>>>> origin/main
 
 
 }

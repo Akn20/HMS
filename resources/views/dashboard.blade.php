@@ -2,6 +2,7 @@
 
 @section('content')
 
+<<<<<<< HEAD
 
     <!--!=========================================================== !-->
     <!--! [Start] Main Content !-->
@@ -1098,3 +1099,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+=======
+@endsection
+>>>>>>> origin/main

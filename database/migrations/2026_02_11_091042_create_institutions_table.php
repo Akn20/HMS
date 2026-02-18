@@ -4,18 +4,28 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+<<<<<<< HEAD
 return new class extends Migration {
+=======
+return new class extends Migration
+{
+>>>>>>> origin/main
     /**
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::create('institutions', function (Blueprint $table) {
+<<<<<<< HEAD
             $table->uuid('id')->primary();
+=======
+            $table->id();
+>>>>>>> origin/main
 
             // Core Details
             $table->string('name');
             $table->string('code')->unique();
+<<<<<<< HEAD
             $table->uuid('organization_id')->nullable();
             $table->string('gst_number')->nullable();
             $table->text('address')->nullable();
@@ -65,13 +75,42 @@ return new class extends Migration {
             $table->string('support_sla')->nullable();
 
             $table->softDeletes();
+=======
+            $table->string('email')->nullable();
+            $table->string('contact_number')->nullable();
+            $table->text('address')->nullable();
+
+            // Access & Branding
+            $table->string('institution_url')->nullable();
+            $table->string('default_language')->nullable();
+            $table->string('login_template')->nullable();
+            $table->string('logo')->nullable();
+
+            // Admin & Control
+            $table->string('admin_name')->nullable();
+            $table->string('admin_email')->nullable();
+            $table->string('admin_mobile')->nullable();
+
+            // Billing & Payment
+            $table->string('invoice_type')->nullable();
+            $table->decimal('invoice_amount', 10, 2)->nullable();
+            $table->string('payment_mode')->nullable();
+            $table->string('payment_status')->nullable();
+
+            // Status
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
+
+>>>>>>> origin/main
             $table->timestamps();
         });
     }
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> origin/main
     /**
      * Reverse the migrations.
      */
@@ -79,4 +118,8 @@ return new class extends Migration {
     {
         Schema::dropIfExists('institutions');
     }
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> origin/main

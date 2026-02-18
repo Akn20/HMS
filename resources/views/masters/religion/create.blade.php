@@ -28,6 +28,7 @@
                             <form action="{{ route('religion.store') }}" method="POST">
                                 @csrf
 
+<<<<<<< HEAD
                                 <div class="mb-4">
                                     <label class="form-label">
                                         Religion Name <span class="text-danger">*</span>
@@ -43,6 +44,10 @@
                                         <option value="Inactive">Inactive</option>
                                     </select>
                                 </div>
+=======
+                                @include('masters.religion.form')
+
+>>>>>>> origin/main
 
                                 <div class="d-flex gap-2">
                                     <button type="submit" class="btn btn-primary">
