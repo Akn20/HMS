@@ -14,6 +14,18 @@
                     <label>Navigation</label>
                 </li>
 
+<<<<<<< HEAD
+                {{-- ================= DASHBOARD ================= --}}
+
+                <li class="nxl-item nxl-hasmenu">
+                    <a href="{{ route('dashboard') }}"  class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-airplay"></i></span>
+                        <span class="nxl-mtext">Dashboard</span>
+                    </a>     
+                </li>
+
+=======
+>>>>>>> origin/main
                 {{-- ================= ORGANIZATION ================= --}}
                 <li class="nxl-item nxl-hasmenu">
                     <a href="javascript:void(0);" class="nxl-link">
@@ -60,13 +72,21 @@
                 <li class="nxl-item">
                     <a href="{{ route('modules.index') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-grid"></i></span>
+<<<<<<< HEAD
+                        <span class="nxl-mtext">Modules</span>
+=======
                         <span class="nxl-mtext">Module Management</span>
+>>>>>>> origin/main
                     </a>
                 </li>
 
                 <!-- Religion -->
                 <li class="nxl-item">
+<<<<<<< HEAD
+                    <a href="" class="nxl-link">
+=======
                     <a href="{{ route('religion.index') }}" class="nxl-link">
+>>>>>>> origin/main
                         <span class="nxl-micon"><i class="feather-airplay"></i></span>
                         <span class="nxl-mtext">Religion</span>
                     </a>
@@ -74,7 +94,11 @@
 
                 <!-- Job Type -->
                 <li class="nxl-item">
+<<<<<<< HEAD
+                    <a href="" class="nxl-link">
+=======
                     <a href="{{ route('job-type.index') }}" class="nxl-link">
+>>>>>>> origin/main
                         <span class="nxl-micon"><i class="feather-cast"></i></span>
                         <span class="nxl-mtext">Job Type</span>
                     </a>
@@ -82,12 +106,18 @@
 
                 <!-- Work Status -->
                 <li class="nxl-item">
+<<<<<<< HEAD
+                    <a href="" class="nxl-link">
+=======
                     <a href="{{ route('work-status.index') }}" class="nxl-link">
+>>>>>>> origin/main
                         <span class="nxl-micon"><i class="feather-send"></i></span>
                         <span class="nxl-mtext">Work Status</span>
                     </a>
                 </li>
 
+<<<<<<< HEAD
+=======
 
                 <!-- Designation -->
 
@@ -114,6 +144,7 @@
                     </a>
                 </li>
 
+>>>>>>> origin/main
             </ul>
         </div>
     </div>

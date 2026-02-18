@@ -24,6 +24,12 @@ class ReligionController extends Controller
 
     public function store(Request $request)
     {
+<<<<<<< HEAD
+        $request->validate([
+            'religion_name' => 'required|max:100|unique:religion_master',
+            'status' => 'required'
+        ]);
+=======
         $request->validate(
             [
                 'religion_name' => 'required|max:100|unique:religion_master,religion_name',
@@ -36,6 +42,7 @@ class ReligionController extends Controller
             ]
         );
 
+>>>>>>> origin/main
 
         Religion::create([
             'religion_name' => $request->religion_name,
@@ -55,6 +62,12 @@ class ReligionController extends Controller
 
     public function update(Request $request, $id)
     {
+<<<<<<< HEAD
+        $request->validate([
+            'religion_name' => "required|max:100|unique:religion_master,religion_name,$id",
+            'status' => 'required'
+        ]);
+=======
         $request->validate(
             [
                 'religion_name' => "required|max:100|unique:religion_master,religion_name,$id",
@@ -67,6 +80,7 @@ class ReligionController extends Controller
             ]
         );
 
+>>>>>>> origin/main
 
         $religion = Religion::findOrFail($id);
 
@@ -110,6 +124,14 @@ class ReligionController extends Controller
 
     //API
 
+<<<<<<< HEAD
+    public function apiIndex()
+    {
+        $data = Religion::where('status', 'Active')->get();
+        return ApiResponse::success($data, 'Religion list fetched');
+    }
+
+=======
     public function apiIndex(Request $request)
     {
         $query = Religion::query();
@@ -124,6 +146,7 @@ class ReligionController extends Controller
     }
 
 
+>>>>>>> origin/main
     public function apiStore(Request $request)
     {
         $request->validate([
@@ -161,6 +184,8 @@ class ReligionController extends Controller
 
         return ApiResponse::success(null, 'Religion deleted');
     }
+<<<<<<< HEAD
+=======
     public function apiDeleted()
     {
         $data = Religion::onlyTrashed()->get();
@@ -182,6 +207,7 @@ class ReligionController extends Controller
 
         return ApiResponse::success(null, 'Religion permanently deleted');
     }
+>>>>>>> origin/main
 
 
 }

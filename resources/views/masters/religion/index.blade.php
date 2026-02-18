@@ -71,6 +71,12 @@
             <i class="feather-edit"></i>
         </a>
 
+<<<<<<< HEAD
+        <a href="{{ route('religion.delete', $religion->id) }}"
+           class="avatar-text avatar-md action-icon action-delete">
+            <i class="feather-trash-2"></i>
+        </a>
+=======
         <form action="{{ route('religion.delete', $religion->id) }}"
                                                             method="POST" class="d-inline"
                                                             onsubmit="return confirm('Are you sure you want to delete this religion?');">
@@ -83,6 +89,7 @@
                                                                 <i class="feather-trash-2"></i>
                                                             </button>
                                                         </form>
+>>>>>>> origin/main
 
     </div>
 </td>

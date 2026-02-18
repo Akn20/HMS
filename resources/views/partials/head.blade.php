@@ -14,14 +14,24 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/css/daterangepicker.min.css') }}" />
 
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/theme.min.css') }}" />
+<<<<<<< HEAD
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+=======
 <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+>>>>>>> origin/main
 
 
 <style>
     .nxl-container {
+<<<<<<< HEAD
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+=======
         min-height: 100vh;
         display: flex;
         flex-direction: column;
+>>>>>>> origin/main
     }
 
     .nxl-content {
@@ -31,6 +41,8 @@
     .footer {
         margin-top: auto;
     }
+<<<<<<< HEAD
+=======
 
     .btn-neutral {
         background: #f8f9fa;
@@ -71,4 +83,5 @@
         color: #198754;
         background: rgba(25, 135, 84, 0.08);
     }
+>>>>>>> origin/main
 </style>

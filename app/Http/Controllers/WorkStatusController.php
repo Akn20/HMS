@@ -24,6 +24,21 @@ class WorkStatusController extends Controller
 
     public function store(Request $request)
     {
+<<<<<<< HEAD
+        $request->validate([
+    'work_status_code' => 'required|max:50|unique:work_status_master',
+    'work_status_name' => 'required|max:100',
+    'status' => 'required'
+]);
+
+WorkStatus::create([
+    'work_status_code' => $request->work_status_code,
+    'work_status_name' => $request->work_status_name,
+    'description'      => $request->description,
+    'status'           => $request->status,
+    'created_by'       => 1
+]);
+=======
         $request->validate(
             [
                 'work_status_code' => 'required|max:50|unique:work_status_master,work_status_code',
@@ -47,6 +62,7 @@ class WorkStatusController extends Controller
             'status' => $request->status,
             'created_by' => 1
         ]);
+>>>>>>> origin/main
 
 
         return redirect()->route('work-status.index')
@@ -61,6 +77,22 @@ class WorkStatusController extends Controller
 
     public function update(Request $request, $id)
     {
+<<<<<<< HEAD
+        $request->validate([
+    'work_status_code' => "required|max:50|unique:work_status_master,work_status_code,$id",
+    'work_status_name' => 'required|max:100',
+    'status' => 'required'
+]);
+
+$workStatus->update([
+    'work_status_code' => $request->work_status_code,
+    'work_status_name' => $request->work_status_name,
+    'description'      => $request->description,
+    'status'           => $request->status,
+    'updated_by'       => 1
+]);
+
+=======
         $request->validate(
             [
                 'work_status_code' => "required|max:50|unique:work_status_master,work_status_code,$id",
@@ -86,13 +118,17 @@ class WorkStatusController extends Controller
             'status' => $request->status,
             'updated_by' => 1
         ]);
+>>>>>>> origin/main
 
         return redirect()->route('work-status.index')
             ->with('success', 'Work Status updated successfully');
     }
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> origin/main
     public function destroy($id)
     {
         $workStatus = WorkStatus::findOrFail($id);
@@ -123,6 +159,17 @@ class WorkStatusController extends Controller
     }
 
     //API
+<<<<<<< HEAD
+    public function apiIndex()
+    {
+        $data = WorkStatus::where('status', 'Active')->get();
+        return ApiResponse::success($data, 'Work status fetched');
+    }
+
+    public function apiStore(Request $request)
+    {
+        $request->validate([
+=======
     public function apiIndex(Request $request)
     {
         $query = WorkStatus::query();
@@ -141,12 +188,23 @@ class WorkStatusController extends Controller
     {
         $request->validate([
             'work_status_code' => 'required|max:20|unique:work_status_master,work_status_code',
+>>>>>>> origin/main
             'work_status_name' => 'required|max:100',
             'status' => 'required'
         ]);
 
         $data = WorkStatus::create([
             'id' => Str::uuid(),
+<<<<<<< HEAD
+            'work_status_name' => $request->work_status_name,
+            'status' => $request->status,
+            'created_by' => 1
+        ]);
+
+        return ApiResponse::success($data, 'Work status created');
+    }
+
+=======
             'work_status_code' => $request->work_status_code,
             'work_status_name' => $request->work_status_name,
             'description' => $request->description,
@@ -157,6 +215,7 @@ class WorkStatusController extends Controller
     }
 
 
+>>>>>>> origin/main
     public function apiUpdate(Request $request, $id)
     {
         $data = WorkStatus::findOrFail($id);
@@ -178,6 +237,8 @@ class WorkStatusController extends Controller
         return ApiResponse::success(null, 'Work status deleted');
     }
 
+<<<<<<< HEAD
+=======
     public function apiDeleted()
     {
         $data = WorkStatus::onlyTrashed()->get();
@@ -200,4 +261,5 @@ class WorkStatusController extends Controller
         return ApiResponse::success(null, 'Work status permanently deleted');
     }
 
+>>>>>>> origin/main
 }
