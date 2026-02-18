@@ -75,43 +75,28 @@
         document.addEventListener('DOMContentLoaded', function() {
             'use strict';
 
-            // 1. Fetch the form
             const forms = document.querySelectorAll('.needs-validation');
 
-            // 2. Loop over them and prevent submission
             Array.from(forms).forEach(function(form) {
                 form.addEventListener('submit', function(event) {
+
                     if (!form.checkValidity()) {
                         event.preventDefault();
                         event.stopPropagation();
 
-                        // Find the first invalid element and scroll to it
+                        // Scroll to first invalid field
                         const firstInvalid = form.querySelector(':invalid');
                         if (firstInvalid) {
                             firstInvalid.focus();
                         }
                     }
-                    // This class makes the .invalid-feedback visible
+
                     form.classList.add('was-validated');
                 }, false);
             });
         });
-
-    (function() {
-    'use strict'
-    const forms = document.querySelectorAll('.needs-validation')
-
-    Array.from(forms).forEach(form => {
-    form.addEventListener('submit', event => {
-    if (!form.checkValidity()) {
-    event.preventDefault()
-    event.stopPropagation()
-    }
-    form.classList.add('was-validated')
-    }, false)
-    })
-    })()
     </script>
+
 </body>
 
 </html>
