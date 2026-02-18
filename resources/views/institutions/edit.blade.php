@@ -20,7 +20,10 @@
 
 <form action="{{ route('institutions.update', $institution->id) }}"
       method="POST"
-      enctype="multipart/form-data">
+      enctype="multipart/form-data"
+      class="needs-validation"
+      novalidate>
+
     @csrf
     @method('PUT')
 
@@ -32,5 +35,6 @@
         </button>
     </div>
 </form>
+
 
 @endsection

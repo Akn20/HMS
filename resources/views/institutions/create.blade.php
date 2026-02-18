@@ -20,7 +20,9 @@
 
 <form action="{{ route('institutions.store') }}"
       method="POST"
-      enctype="multipart/form-data">
+      enctype="multipart/form-data"
+      class="needs-validation"
+      novalidate>
     @csrf
 
     @include('institutions.form')
